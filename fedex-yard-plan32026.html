@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PHX Yard Plan</title>
+<style>
+  :root {
+    /* Night mode palette */
+    --bg:        #0d0f12;
+    --bg2:       #141720;
+    --bg3:       #1c2030;
+    --bg4:       #242840;
+    --border:    #2a2f45;
+    --border2:   #353a55;
+    --text:      #dde2f0;
+    --text2:     #9aa0bc;
+    --text3:     #606680;
+
+    /* Accent colors — vivid enough to read on dark */
+    --blue:      #4d9eff;
+    --blue-dim:  rgba(77,158,255,0.12);
+    --orange:    #ff8c42;
+    --orange-dim:rgba(255,140,66,0.12);
+    --purple:    #a78bfa;
+    --purple-dim:rgba(167,139,250,0.12);
+    --teal:      #34d399;
+    --teal-dim:  rgba(52,211,153,0.12);
+    --green:     #4ade80;
+    --green-dim: rgba(74,222,128,0.12);
+    --red:       #f87171;
+    --red-dim:   rgba(248,113,113,0.12);
+    --yellow:    #fbbf24;
+    --yellow-dim:rgba(251,191,36,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; background: var(--bg); color: var(--text); }
+
+  /* ── HEADER ── */
+  .header { background: var(--bg2); color: var(--text); padding: 10px 14px 6px; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.6); border-bottom: 1px solid var(--border); }
+  .header-title { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text3); }
+  .header-main { font-size: 18px; font-weight: 700; color: var(--text); }
+  .header-sub { font-size: 10px; color: var(--text3); margin-top: 1px; }
+
+  /* ── TABS ── */
+  .tabs { display: flex; background: var(--bg2); border-bottom: 1px solid var(--border); }
+  .tab { flex: 1; padding: 9px 4px 7px; text-align: center; font-size: 11px; font-weight: 600; color: var(--text3); cursor: pointer; border-bottom: 3px solid transparent; line-height: 1.3; transition: color .15s; }
+  .tab.active-am { color: var(--blue); border-bottom-color: var(--blue); background: var(--blue-dim); }
+  .tab.active-pm { color: var(--orange); border-bottom-color: var(--orange); background: var(--orange-dim); }
+  .tab.active-tr { color: var(--purple); border-bottom-color: var(--purple); background: var(--purple-dim); }
+  .tab.active-fi { color: var(--teal); border-bottom-color: var(--teal); background: var(--teal-dim); }
+  .tab.active-fb { color: var(--green); border-bottom-color: var(--green); background: var(--green-dim); }
+
+  /* ── FEEDBACK FORM ── */
+  .fb-form { display: flex; flex-direction: column; gap: 14px; }
+  .fb-field { display: flex; flex-direction: column; gap: 5px; }
+  .fb-label { font-size: 12px; font-weight: 700; color: var(--text2); letter-spacing: 0.3px; }
+  .fb-select, .fb-input, .fb-textarea {
+    width: 100%; background: var(--bg3); border: 1px solid var(--border2);
+    border-radius: 8px; color: var(--text); font-size: 14px; padding: 11px 13px;
+    outline: none; font-family: inherit; -webkit-appearance: none; appearance: none;
+  }
+  .fb-select:focus, .fb-input:focus, .fb-textarea:focus { border-color: var(--green); box-shadow: 0 0 0 2px rgba(74,222,128,0.15); }
+  .fb-textarea { min-height: 100px; resize: vertical; line-height: 1.5; }
+  .fb-btn {
+    background: var(--green); color: #061a0e; border: none; border-radius: 10px;
+    padding: 15px; font-size: 16px; font-weight: 800; width: 100%; cursor: pointer;
+    letter-spacing: 0.2px; margin-top: 2px;
+  }
+  .fb-btn:active { opacity: 0.82; }
+  .fb-sent {
+    background: var(--green-dim); border: 1px solid rgba(74,222,128,0.3);
+    border-radius: 8px; padding: 14px; text-align: center; font-size: 13px;
+    color: var(--green); display: none; margin-top: 4px;
+  }
+  .fb-sent-sub { font-size: 11px; color: var(--text3); margin-top: 4px; }
+
+  /* ── PANELS ── */
+  .panel { display: none; padding: 10px; }
+  .panel.active { display: block; }
+
+  /* ── SHIFT HEADERS ── */
+  .shift-header { padding: 10px 12px; border-radius: 8px; margin-bottom: 10px; margin-top: 10px; }
+  .shift-header.am { background: var(--blue-dim); border-left: 4px solid var(--blue); }
+  .shift-header.pm { background: var(--orange-dim); border-left: 4px solid var(--orange); }
+  .shift-header.tr { background: var(--purple-dim); border-left: 4px solid var(--purple); }
+  .shift-title { font-size: 16px; font-weight: 700; color: var(--text); }
+  .shift-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
+
+  /* ── ALERTS ── */
+  .alert { background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.3); border-radius: 6px; padding: 8px 10px; margin-bottom: 10px; font-size: 12px; color: var(--text2); }
+  .alert strong { color: var(--yellow); }
+  .alert-info { background: var(--blue-dim); border-color: rgba(77,158,255,0.3); }
+  .alert-info strong { color: var(--blue); }
+
+  /* ── LEGEND ── */
+  .legend { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .legend-item { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--text2); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-trailer { background: var(--blue); } .dot-tractor { background: var(--orange); }
+  .dot-postal { background: var(--purple); } .dot-ground { background: var(--green); } .dot-str { background: var(--text3); }
+
+  /* ── OVERFLOW KEY ── */
+  .overflow-key { background: var(--bg3); border-radius: 8px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 10px; }
+  .overflow-key-title { background: var(--red-dim); border-bottom: 1px solid rgba(248,113,113,0.3); color: var(--red); padding: 7px 10px; font-size: 12px; font-weight: 700; }
+  .overflow-area { padding: 8px 10px; border-bottom: 1px solid var(--border); font-size: 12px; }
+  .overflow-area:last-child { border-bottom: none; }
+  .oa-label { font-weight: 700; font-size: 13px; }
+  .oa-label.a { color: var(--red); } .oa-label.b { color: var(--orange); } .oa-label.c { color: var(--text2); }
+  .oa-desc { color: var(--text3); font-size: 11px; margin-top: 2px; }
+
+  /* ── SECTION HEADS & DOOR LISTS ── */
+  .section-head { background: var(--bg4); color: var(--text); padding: 7px 10px; border-radius: 6px 6px 0 0; font-size: 12px; font-weight: 700; letter-spacing: 0.5px; margin-top: 12px; border: 1px solid var(--border); border-bottom: none; }
+  .door-list { background: var(--bg3); border-radius: 0 0 6px 6px; overflow: hidden; border: 1px solid var(--border); border-top: none; margin-bottom: 2px; }
+  .door-row { display: flex; align-items: stretch; border-bottom: 1px solid var(--border); min-height: 38px; }
+  .door-row:last-child { border-bottom: none; }
+  .door-row.restricted { background: var(--red-dim); }
+  .door-row.highlight { background: var(--yellow-dim); }
+  .door-row.empty-row { opacity: 0.55; }
+  .door-label { background: var(--bg4); padding: 8px; font-size: 11px; font-weight: 700; color: var(--text2); min-width: 76px; display: flex; align-items: center; border-right: 1px solid var(--border); flex-shrink: 0; line-height: 1.2; }
+  .door-content { padding: 7px 9px; flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 3px; }
+
+  /* ── BADGES — dark-mode vivid ── */
+  .badge { display: inline-block; padding: 2px 7px; border-radius: 10px; font-size: 11px; font-weight: 600; line-height: 1.4; }
+  .badge-blue   { background: rgba(77,158,255,0.18);  color: #7db8ff; border: 1px solid rgba(77,158,255,0.25); }
+  .badge-orange { background: rgba(255,140,66,0.18);  color: #ffaa70; border: 1px solid rgba(255,140,66,0.25); }
+  .badge-green  { background: rgba(74,222,128,0.15);  color: #6ee7a0; border: 1px solid rgba(74,222,128,0.22); }
+  .badge-purple { background: rgba(167,139,250,0.18); color: #c4affe; border: 1px solid rgba(167,139,250,0.25); }
+  .badge-gray   { background: rgba(255,255,255,0.06); color: var(--text2); border: 1px solid var(--border2); }
+  .badge-red    { background: rgba(248,113,113,0.15); color: #fca5a5; border: 1px solid rgba(248,113,113,0.25); }
+  .badge-yellow { background: rgba(251,191,36,0.15);  color: #fcd34d; border: 1px solid rgba(251,191,36,0.22); }
+  .badge-teal   { background: rgba(52,211,153,0.15);  color: #6ee7c0; border: 1px solid rgba(52,211,153,0.22); }
+
+  .door-note { font-size: 10px; color: var(--text3); margin-top: 1px; }
+  .door-warn { font-size: 10px; color: var(--red); font-weight: 600; margin-top: 2px; }
+  .door-info { font-size: 10px; color: var(--blue); font-weight: 600; margin-top: 2px; }
+  .no-park { color: var(--red); font-weight: 700; font-size: 12px; }
+  .asset-num { font-size: 11px; color: var(--text2); font-family: monospace; }
+  .wave-tag { font-size: 10px; color: var(--text3); }
+  .time-badge { font-size: 10px; font-weight: 600; color: var(--purple); background: var(--purple-dim); padding: 1px 6px; border-radius: 8px; border: 1px solid rgba(167,139,250,0.2); }
+
+  /* ── HWT TABLE ── */
+  .hwt-table { width: 100%; border-collapse: collapse; font-size: 12px; background: var(--bg3); border-radius: 0 0 6px 6px; overflow: hidden; border: 1px solid var(--border); border-top: none; margin-bottom: 10px; }
+  .hwt-table th { background: var(--bg4); color: var(--text2); padding: 7px 8px; text-align: left; font-size: 11px; border-bottom: 1px solid var(--border2); }
+  .hwt-table td { padding: 6px 8px; border-bottom: 1px solid var(--border); color: var(--text); }
+  .hwt-table tr:last-child td { border-bottom: none; }
+  .hwt-table tr:hover td { background: var(--bg4); }
+  .hwt-table td:first-child { font-weight: 700; color: var(--blue); }
+  .hwt-table .mono { font-family: monospace; color: var(--text2); }
+
+  /* ── PM DRIVER TABLE ── */
+  .pm-table { width: 100%; border-collapse: collapse; font-size: 12px; background: var(--bg3); border-radius: 0 0 6px 6px; overflow: hidden; border: 1px solid var(--border); border-top: none; margin-bottom: 10px; }
+  .pm-table th { background: var(--bg4); color: var(--text2); padding: 7px 8px; text-align: left; font-size: 10px; letter-spacing: 0.4px; text-transform: uppercase; border-bottom: 1px solid var(--border2); }
+  .pm-table td { padding: 7px 8px; border-bottom: 1px solid var(--border); color: var(--text); }
+  .pm-table tr:last-child td { border-bottom: none; }
+  .pm-table tr:hover td { background: var(--bg4); }
+  .pm-table td:first-child { color: var(--text2); font-size: 11px; }
+  .pm-table .unit-num { font-family: monospace; font-weight: 700; color: var(--orange); font-size: 13px; }
+  .pm-table .start-time { font-family: monospace; color: var(--teal); font-weight: 600; font-size: 12px; }
+  .pm-table .emp-num { font-family: monospace; color: var(--text3); font-size: 10px; }
+
+  /* ── OOS TABLE ── */
+  .oos-table { width: 100%; border-collapse: collapse; font-size: 12px; background: var(--bg3); border-radius: 0 0 6px 6px; overflow: hidden; border: 1px solid var(--border); border-top: none; margin-bottom: 10px; }
+  .oos-table th { background: rgba(248,113,113,0.15); color: var(--red); padding: 7px 8px; text-align: left; font-size: 10px; letter-spacing: 0.4px; text-transform: uppercase; border-bottom: 1px solid rgba(248,113,113,0.2); }
+  .oos-table td { padding: 7px 8px; border-bottom: 1px solid var(--border); color: var(--text); }
+  .oos-table tr:last-child td { border-bottom: none; }
+  .oos-table .oos-unit { font-family: monospace; font-weight: 700; color: var(--red); }
+  .oos-table .oos-spare { font-family: monospace; color: var(--yellow); }
+  .oos-table .strikethrough { text-decoration: line-through; color: var(--text3); }
+
+  /* ── INFO CARDS / SPARES ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .info-card { background: var(--bg3); border-radius: 8px; padding: 10px; border: 1px solid var(--border); }
+  .info-card-title { font-size: 12px; font-weight: 700; color: var(--text2); margin-bottom: 8px; padding-bottom: 5px; border-bottom: 1px solid var(--border); }
+  .spare-group { margin-bottom: 8px; }
+  .spare-group-label { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
+  .spare-item { font-family: monospace; font-size: 12px; color: var(--text2); display: flex; justify-content: space-between; padding: 2px 0; border-bottom: 1px solid var(--border); }
+  .spare-item:last-child { border-bottom: none; }
+  .spare-item .tag { font-size: 10px; color: var(--text3); font-family: sans-serif; }
+  .shuttle-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+  .shuttle-row:last-child { border-bottom: none; }
+  .shuttle-route { font-weight: 700; color: var(--blue); min-width: 50px; }
+  .shuttle-asset { font-family: monospace; color: var(--text2); }
+
+  /* ── TRANSITION TOGGLE ── */
+  .tr-toggle { display: flex; background: var(--bg3); border-radius: 8px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 10px; }
+  .tr-btn { flex: 1; padding: 10px 8px; text-align: center; cursor: pointer; font-size: 12px; font-weight: 600; color: var(--text2); border: none; background: none; }
+  .tr-btn.active { background: var(--purple-dim); color: var(--purple); border-bottom: 2px solid var(--purple); }
+
+  /* ── TRACTOR CARD ── */
+  .tractor-card { background: var(--bg3); border-radius: 8px; border: 1px solid var(--border); padding: 10px 12px; margin-bottom: 10px; margin-top: 12px; }
+  .tractor-card-title { font-size: 12px; font-weight: 700; color: var(--text2); margin-bottom: 6px; }
+  .tractor-rule { font-size: 12px; color: var(--text2); padding: 3px 0; border-bottom: 1px solid var(--border); }
+  .tractor-rule:last-child { border-bottom: none; }
+  .tractor-rule.warn { color: var(--red); font-weight: 600; }
+
+  /* ── SAT NOTE ── */
+  .sat-note { background: var(--yellow-dim); border: 1px solid rgba(251,191,36,0.3); border-radius: 6px; padding: 8px 10px; margin-top: 10px; font-size: 12px; color: var(--yellow); }
+  .sat-note strong { display: block; margin-bottom: 2px; color: var(--yellow); }
+
+  /* ── SEARCH ── */
+  .search-wrap { padding: 4px 0 10px; }
+  .search-input-wrap { position: relative; margin-bottom: 10px; }
+  .search-input { width: 100%; padding: 11px 14px 11px 38px; border: 2px solid var(--border2); border-radius: 25px; font-size: 15px; outline: none; background: var(--bg3); color: var(--text); caret-color: var(--teal); }
+  .search-input::placeholder { color: var(--text3); }
+  .search-input:focus { border-color: var(--teal); }
+  .search-icon { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); font-size: 16px; color: var(--text3); pointer-events: none; }
+  .search-clear { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 18px; color: var(--text3); cursor: pointer; display: none; background: none; border: none; padding: 0; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .chip { background: var(--bg3); border: 1px solid var(--border2); border-radius: 20px; padding: 5px 12px; font-size: 12px; cursor: pointer; color: var(--text2); white-space: nowrap; }
+  .chip:active { background: var(--teal-dim); color: var(--teal); border-color: var(--teal); }
+  .result-card { background: var(--bg3); border-radius: 8px; border: 1px solid var(--border); margin-bottom: 8px; overflow: hidden; }
+  .result-header { padding: 8px 12px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; color: white; }
+  .result-header.am { background: rgba(77,158,255,0.35); color: var(--blue); }
+  .result-header.pm { background: rgba(255,140,66,0.3); color: var(--orange); }
+  .result-header.tr { background: rgba(167,139,250,0.3); color: var(--purple); }
+  .result-header.all { background: var(--bg4); color: var(--text2); }
+  .result-body { padding: 8px 12px; font-size: 13px; }
+  .result-door { font-size: 16px; font-weight: 700; color: var(--text); }
+  .result-assign { color: var(--text2); margin-top: 2px; }
+  .result-note { color: var(--red); font-size: 11px; margin-top: 3px; }
+  .no-results { text-align: center; color: var(--text3); padding: 30px 10px; font-size: 14px; }
+  .search-hint { text-align: center; color: var(--text3); font-size: 13px; padding: 20px 10px; }
+
+  .footer { text-align: center; padding: 16px 10px; font-size: 11px; color: var(--text3); border-top: 1px solid var(--border); margin-top: 10px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title">FedEx Express</div>
+  <div class="header-main">PHX Cargo Yard</div>
+  <div class="header-sub" id="clock">--:-- -- &nbsp;·&nbsp; Rev. 12/31/24 · Upd. 4/10/26</div>
+</div>
+
+<div class="tabs">
+  <div class="tab active-am" id="tab-am" onclick="showTab('am')">☀️ AM<br>Tue–Sat</div>
+  <div class="tab" id="tab-pm" onclick="showTab('pm')">🌙 PM<br>Mon–Fri</div>
+  <div class="tab" id="tab-tr" onclick="showTab('tr')">🔄 TRANS-<br>ITION</div>
+  <div class="tab" id="tab-fi" onclick="showTab('fi')">🔍 FIND<br>MY SPOT</div>
+  <div class="tab" id="tab-fb" onclick="showTab('fb')">📨 SEND<br>UPDATE</div>
+</div>
+
+<!-- ══════════════════════════ AM SHIFT ══════════════════════════ -->
+<div class="panel active" id="panel-am">
+  <div class="shift-header am">
+    <div class="shift-title">☀️ AM SHIFT — Plan 8.2</div>
+    <div class="shift-sub">Tue – Sat &nbsp;|&nbsp; DURING A.M. OPS</div>
+  </div>
+  <div class="alert"><strong>⚠️ IMPORTANT</strong> If your trailer doesn't appear on this plan, go to the yard and drop it. Park tractor in designated tractor parking. Questions → ask yard director.</div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot dot-trailer"></div>Trailer</div>
+    <div class="legend-item"><div class="legend-dot dot-tractor"></div>Tractor</div>
+    <div class="legend-item"><div class="legend-dot dot-postal"></div>Postal</div>
+    <div class="legend-item"><div class="legend-dot dot-ground"></div>Ground</div>
+    <div class="legend-item"><div class="legend-dot dot-str"></div>Str. Truck</div>
+  </div>
+
+  <div class="overflow-key">
+    <div class="overflow-key-title">🔴 HWT Overflow Staging Areas</div>
+    <div class="overflow-area">
+      <div class="oa-label a">Area A — Dr 20S · 21N · 21S</div>
+      <div class="oa-desc">Primary HWT overflow. If contract trailers are staged here, HWT parks in front of contract trailer. No room → Area B.</div>
+    </div>
+    <div class="overflow-area">
+      <div class="oa-label b">Area B — National Guard Fence</div>
+      <div class="oa-desc">Secondary overflow. Usually reserved for truck + trailer asset sets. Use when Area A is full.</div>
+    </div>
+    <div class="overflow-area">
+      <div class="oa-label c">Area C — Dr 7N · 19S · 23S · 26S (Str. Truck spots)</div>
+      <div class="oa-desc">Customer Svc front / designated str. truck areas. Dr 7N max 2. Dr 23S leave room at 24N. Last resort.</div>
+    </div>
+  </div>
+
+  <div class="section-head">📍 Front — Dr 1–6</div>
+  <div class="door-list">
+    <div class="door-row empty-row"><div class="door-label">Dr 1</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+    <div class="door-row empty-row"><div class="door-label">Dr 2N</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+    <div class="door-row"><div class="door-label">Cust. Row</div><div class="door-content"><div><span class="badge badge-orange">Tractor</span> <span class="badge badge-gray">Str. Truck</span> <span class="badge badge-gray">Str. Truck</span></div><div class="door-note">Twin axle tractor only</div></div></div>
+    <div class="door-row"><div class="door-label">RENTAL</div><div class="door-content"><span class="badge badge-yellow">RENTAL truck</span> <span class="asset-num">← NPHOG</span></div></div>
+    <div class="door-row"><div class="door-label">Routes</div><div class="door-content"><span class="badge badge-blue">LHUA</span> <span class="badge badge-blue">FLGA</span> <span class="badge badge-blue">SOWA</span></div></div>
+    <div class="door-row"><div class="door-label">Vans</div><div class="door-content"><span class="badge badge-gray">Training van</span> <span class="badge badge-gray">Transport van</span></div></div>
+    <div class="door-row restricted"><div class="door-label">Dr 5</div><div class="door-content"><span class="no-park">F.O. Sort — NO Unauthorized Parking</span></div></div>
+    <div class="door-row"><div class="door-label">Dr 6</div><div class="door-content"><span class="badge badge-gray">Building Entrance Ramp</span></div></div>
+  </div>
+
+  <div class="section-head">📍 Main Dock — Dr 7N–12S</div>
+  <div class="door-list">
+    <div class="door-row"><div class="door-label">Dr 7N</div><div class="door-content"><div><span class="badge badge-gray">Str. Truck</span> <span class="badge badge-gray">Str. Truck</span></div><div class="door-warn">Storage only — max 2 &nbsp;·&nbsp; HWT Overflow Area C</div></div></div>
+    <div class="door-row restricted"><div class="door-label">Dr 7S</div><div class="door-content"><span class="badge badge-gray">No Belt — Dock plate only</span></div></div>
+    <div class="door-row"><div class="door-label">Dr 8N</div><div class="door-content"><span class="badge badge-blue">Input belt</span></div></div>
+    <div class="door-row"><div class="door-label">Dr 8S</div><div class="door-content"><span class="badge badge-blue">Input belt</span></div></div>
+    <div class="door-row"><div class="door-label">Dr 9N</div><div class="door-content"><span class="badge badge-blue">Input belt</span></div></div>
+    <div class="door-row empty-row"><div class="door-label">Dr 9S</div><div class="door-content"><span class="badge badge-gray">Empty</span><div class="door-note">Overflow — 53' trailers &amp; inbound contract trailers as needed</div></div></div>
+    <div class="door-row empty-row"><div class="door-label">Dr 10N</div><div class="door-content"><span class="badge badge-gray">Empty</span><div class="door-note">Overflow — 53' trailers &amp; contract trailers as needed · Not for tractor storage</div></div></div>
+    <div class="door-row empty-row"><div class="door-label">Dr 10S</div><div class="door-content"><span class="badge badge-gray">Empty</span><div class="door-note">Overflow — 53' trailers &amp; contract trailers as needed · Not for tractor storage</div></div></div>
+    <div class="door-row"><div class="door-label">Junk Decking</div><div class="door-content"><span class="badge badge-green">Pallet Trailer</span><div class="door-warn">⛔ Reserved for Pallet Trailer ONLY</div></div></div>
+    <div class="door-row empty-row"><div class="door-label">Dr 11N</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+    <div class="door-row empty-row"><div class="door-label">Dr 11S</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+    <div class="door-row empty-row"><div class="door-label">Dr 12N</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+    <div class="door-row empty-row"><div class="door-label">Dr 12S</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+  </div>
+
+  <div class="section-head">📍 Station Couriers — Dr 13N–19N</div>
+  <div style="background:#fdecea;border:1px solid #f5c6cb;border-top:none;padding:6px 10px;font-size:11px;font-weight:700;color:var(--red);">Dr 13N–14S: Station Couriers — NO Unauthorized Parking</div>
+  <div class="door-list" style="border-radius:0 0 6px 6px;">
+    <div class="door-row highlight"><div class="door-label">Dr 13N</div><div class="door-content"><div><span class="badge badge-yellow">53' Overflow / Inbound Contract</span> <span class="time-badge">~10am–Noon</span></div><div class="door-note">Separate dock. Overflow 53' &amp; inbound contract trailers.</div></div></div>
+    <div class="door-row highlight"><div class="door-label">Dr 13S</div><div class="door-content"><div><span class="badge badge-yellow">53' Overflow / Inbound Contract</span> <span class="time-badge">~10am–Noon</span></div><div class="door-note">Separate dock. Overflow 53' &amp; inbound contract trailers.</div></div></div>
+    <div class="door-row"><div class="door-label">Dr 14N</div><div class="door-content"><div><span class="badge badge-blue">LA Trailer</span> <span class="badge badge-orange">Tractor 305224</span></div></div></div>
+    <div class="door-row empty-row"><div class="door-label">Dr 14S</div><div class="door-content"><span class="badge badge-gray">Empty / Overflow</span></div></div>
+    <div class="door-row"><div class="door-label">Dr 15N</div><div class="door-content"><span class="badge badge-blue">SCFA</span></div></div>
+    <div class="door-row"><div class="door-label">Dr 15S</div><div class="door-content"><span class="badge badge-blue">ZSYA</span></div></div>
+    <div class="door-row highlight"><div class="door-label">Dr 16N</div><div class="door-content"><span class="badge badge-yellow">Overflow — Any Type</span><div class="door-note">Available for overflow of any type.</div></div></div>
+    <div class="door-row"><div class="door-label">Dr 16S</div><div class="door-content"><span class="badge badge-blue">LUFA</span> <span class="badge badge-blue">TUSA</span></div></div>
+    <div class="door-row"><div class="door-label">Dr 17N</div><div class="door-content"><span class="badge badge-blue">LUFA</span></div></div>
+    <div class="door-row"><div class="door-label">Dr 17S</div><div class="door-content"><span class="badge badge-blue">LUFA</span></div></div>
+    <div class="door-row highlight"><div class="door-label">Dr 18N</div><div class="door-content"><span class="badge badge-teal">Stage Softside</span> <span class="time-badge">~10am–Noon</span><div class="door-info">AM → PM staging. Stage 3 softsides across 18N · 18S · 19N.</div></div></div>
+    <div class="door-row highlight"><div class="door-label">Dr 18S</div><div class="door-content"><span class="badge badge-teal">Stage Softside</span> <span class="time-badge">~10am–Noon</span><div class="door-info">AM → PM staging. Stage 3 softsides across 18N · 18S · 19N.</div></div></div>
+    <div class="door-row highlight"><div class="door-label">Dr 19N</div><div class="door-content"><span class="badge badge-teal">Stage Softside</span> <span class="time-badge">~10am–Noon</span><div class="door-info">AM → PM staging. Stage 3 softsides across 18N · 18S · 19N.</div></div></div>
+  </div>
+
+  <div class="section-head">📍 Lower Dock — Dr 19S–26S &nbsp;<span style="font-weight:400;font-size:11px;opacity:0.8;">⏱ HWT OPS ~Midnight–9am</span></div>
+  <div class="alert alert-info" style="border-radius:0;margin-bottom:0;font-size:11px;"><strong>🚛 HWT Equipment:</strong> Str. trucks (no trailer) · Tractor + pup sets (truck# · trailer#) · Doors actively loaded/offloaded per wave. Operational need may use additional doors.</div>
+  <div class="door-list">
+    <div class="door-row"><div class="door-label">Dr 19S</div><div class="door-content"><div><span class="badge badge-gray">Str. Truck</span> <span class="badge badge-gray">Str. Truck</span></div><div class="door-note">HWT Overflow Area C</div></div></div>
+    <div class="door-row"><div class="door-label">Dr 20N</div><div class="door-content"><div><span class="badge badge-blue">RT 920</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">304923 · 709228(32)</span></div><div class="wave-tag">2nd Wave · RAMP</div></div></div>
+    <div class="door-row"><div class="door-label">Dr 20S</div><div class="door-content"><div><span class="badge badge-blue">RT 902</span> <span class="badge badge-gray">Str. Truck</span> <span class="asset-num">402858</span></div><div class="wave-tag">2nd Wave · RAMP</div><div class="door-warn">⚠️ HWT Overflow Area A — contract trailer staged → HWT in front. Full → Area B.</div></div></div>
+    <div class="door-row"><div class="door-label">Dr 21N</div><div class="door-content"><div><span class="badge badge-blue">RT 910</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">305572 · 709552(32)</span> <span class="wave-tag">3rd · RAMP</span></div><div><span class="badge badge-blue">RT 925</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">304928 · 704674(28)</span> <span class="wave-tag">2nd · DROP LOT</span></div><div class="door-warn">⚠️ HWT Overflow Area A — contract trailer staged → HWT in front. Full → Area B.</div></div></div>
+    <div class="door-row"><div class="door-label">Dr 21S</div><div class="door-content"><div><span class="badge badge-blue">RT 911</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">305753 · 710373(32)</span> <span class="wave-tag">2nd · RAMP</span></div><div><span class="badge badge-blue">RT 912</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">305201 · 709553(32)</span> <span class="wave-tag">3rd · DROP LOT</span></div><div><span class="badge badge-blue">RT 934</span> <span class="badge badge-gray">Str. Truck</span> <span class="asset-num">402721</span> <span class="wave-tag">1st · RAMP</span></div><div class="door-warn">⚠️ HWT Overflow Area A — contract trailer staged → HWT in front. Full → Area B.</div></div></div>
+    <div class="door-row restricted"><div class="door-label">Dr 22N–23N</div><div class="door-content"><span class="no-park">Generator — NO PARKING</span><div class="door-note">Stopping OK — driver must stay with truck</div></div></div>
+    <div class="door-row"><div class="door-label">Dr 23S</div><div class="door-content"><div><span class="badge badge-gray">Str. Truck</span> <span class="badge badge-gray">Str. Truck</span></div><div class="door-warn">⚠️ Leave space from Dr 24N — trailer staging safety &nbsp;·&nbsp; HWT Overflow Area C</div></div></div>
+    <div class="door-row"><div class="door-label">Dr 24N</div><div class="door-content"><div><span class="badge badge-blue">RT 931</span> <span class="badge badge-gray">Str. Truck</span> <span class="asset-num">402446</span> <span class="wave-tag">1st · RAMP</span></div><div><span class="badge badge-blue">RT 907</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">304924 · 709222(32)</span> <span class="wave-tag">2nd · RAMP</span></div><div><span class="badge badge-blue">RT 904</span> <span class="badge badge-gray">Str. Truck</span> <span class="asset-num">403020</span> <span class="wave-tag">3rd · RAMP</span></div></div></div>
+    <div class="door-row"><div class="door-label">Dr 24S</div><div class="door-content"><div><span class="badge badge-blue">RT 932</span> <span class="badge badge-gray">Str. Truck</span> <span class="asset-num">403641</span> <span class="wave-tag">1st · RAMP</span></div><div><span class="badge badge-blue">RT 914</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">304925 · 710378(32)</span> <span class="wave-tag">2nd · RAMP</span></div><div><span class="badge badge-blue">RT 906</span> <span class="badge badge-gray">Str. Truck</span> <span class="asset-num">403060</span> <span class="wave-tag">3rd · RAMP</span></div></div></div>
+    <div class="door-row"><div class="door-label">Dr 25N</div><div class="door-content"><div><span class="badge badge-blue">RT 937</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">306226 · 710341(32)</span> <span class="wave-tag">1st · RAMP</span></div><div><span class="badge badge-blue">RT 905</span> <span class="badge badge-gray">Str. Truck</span> <span class="asset-num">402859</span> <span class="wave-tag">2nd · RAMP</span></div><div><span class="badge badge-blue">RT 908</span> <span class="badge badge-gray">Str. Truck</span> <span class="asset-num">403022</span> <span class="wave-tag">3rd · RAMP</span></div></div></div>
+    <div class="door-row"><div class="door-label">Dr 25S</div><div class="door-content"><div><span class="badge badge-blue">RT 903</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">305414 · 708299(32)</span></div><div class="wave-tag">2nd Wave · RAMP</div></div></div>
+    <div class="door-row"><div class="door-label">Dr 26</div><div class="door-content"><div><span class="badge badge-blue">RT 936</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">306375 · 710342(32)</span></div><div class="wave-tag">1st Wave · RAMP</div></div></div>
+    <div class="door-row"><div class="door-label">Dr 26S</div><div class="door-content"><div><span class="badge badge-gray">Str. Truck</span> <span class="badge badge-gray">Str. Truck</span></div><div class="door-note">HWT Overflow Area C</div></div></div>
+    <div class="door-row"><div class="door-label">INSIDE</div><div class="door-content"><div><span class="badge badge-blue">RT 930</span> <span class="badge badge-gray">Str. Truck</span> <span class="asset-num">403286</span> <span class="wave-tag">RAMP</span></div><div><span class="badge badge-blue">RT 933</span> <span class="badge badge-gray">Str. Truck</span> <span class="asset-num">403640</span> <span class="wave-tag">RAMP</span></div></div></div>
+  </div>
+
+  <div class="sat-note"><strong>🟡 Saturday Morning Only</strong>Dr 20N — 53' Ground Trailer (Saturdays only)</div>
+
+  <div class="tractor-card">
+    <div class="tractor-card-title">🅿️ East Fence — Tractor &amp; HWT Parking</div>
+    <div class="tractor-rule">Twin axle — upper rows (primary)</div>
+    <div class="tractor-rule">Single axle — designated spots only</div>
+    <div class="tractor-rule warn">NO FedEx vehicles in Employee Permit zone</div>
+    <div class="tractor-rule warn">Fire Hydrant area — NO PARKING</div>
+    <div class="tractor-rule">⚠️ Max 2 rows HWT vehicles by fence only</div>
+    <div class="tractor-rule">🚛 Yard Mule: 2 spots near Light Post, south east fence</div>
+  </div>
+
+  <div class="section-head">📦 HWT Truck List 2.0 — Rev. 9/20/2025</div>
+  <table class="hwt-table">
+    <tr><th>RT#</th><th>Truck#</th><th>Trailer#</th><th>Door</th><th>Wave</th></tr>
+    <tr><td>902</td><td class="mono">402858</td><td class="mono">—</td><td>Dr 20S</td><td>2nd · RAMP</td></tr>
+    <tr><td>903</td><td class="mono">305414</td><td class="mono">708299</td><td>Dr 25S</td><td>2nd · RAMP</td></tr>
+    <tr><td>904</td><td class="mono">403020</td><td class="mono">—</td><td>Dr 24N</td><td>3rd · RAMP</td></tr>
+    <tr><td>905</td><td class="mono">402859</td><td class="mono">—</td><td>Dr 25N</td><td>2nd · RAMP</td></tr>
+    <tr><td>906</td><td class="mono">403060</td><td class="mono">—</td><td>Dr 24S</td><td>3rd · RAMP</td></tr>
+    <tr><td>907</td><td class="mono">304924</td><td class="mono">709222</td><td>Dr 24N</td><td>2nd · RAMP</td></tr>
+    <tr><td>908</td><td class="mono">403022</td><td class="mono">—</td><td>Dr 25N</td><td>3rd · RAMP</td></tr>
+    <tr><td>910</td><td class="mono">305572</td><td class="mono">709552</td><td>Dr 21N</td><td>3rd · RAMP</td></tr>
+    <tr><td>911</td><td class="mono">305753</td><td class="mono">710373</td><td>Dr 21S</td><td>2nd · RAMP</td></tr>
+    <tr><td>912</td><td class="mono">305201</td><td class="mono">709553</td><td>Dr 21S</td><td>3rd · DROP LOT</td></tr>
+    <tr><td>914</td><td class="mono">304925</td><td class="mono">710378</td><td>Dr 24S</td><td>2nd · RAMP</td></tr>
+    <tr><td>920</td><td class="mono">304923</td><td class="mono">709228</td><td>Dr 20N</td><td>2nd · RAMP</td></tr>
+    <tr><td>925</td><td class="mono">304928</td><td class="mono">704674</td><td>Dr 21N</td><td>2nd · DROP LOT</td></tr>
+    <tr><td>930</td><td class="mono">403286</td><td class="mono">—</td><td>INSIDE</td><td>RAMP</td></tr>
+    <tr><td>931</td><td class="mono">402446</td><td class="mono">—</td><td>Dr 24N</td><td>1st · RAMP</td></tr>
+    <tr><td>932</td><td class="mono">403641</td><td class="mono">—</td><td>Dr 24S</td><td>1st · RAMP</td></tr>
+    <tr><td>933</td><td class="mono">403640</td><td class="mono">—</td><td>INSIDE</td><td>RAMP</td></tr>
+    <tr><td>934</td><td class="mono">402721</td><td class="mono">—</td><td>Dr 21S</td><td>1st · RAMP</td></tr>
+    <tr><td>936</td><td class="mono">306375</td><td class="mono">710342</td><td>Dr 26</td><td>1st · RAMP</td></tr>
+    <tr><td>937</td><td class="mono">306226</td><td class="mono">710341</td><td>Dr 25N</td><td>1st · RAMP</td></tr>
+  </table>
+
+  <div class="two-col">
+    <div class="info-card">
+      <div class="info-card-title">🚛 Spares</div>
+      <div class="spare-group"><div class="spare-group-label">Tractors</div>
+        <div class="spare-item">301513</div><div class="spare-item">303771 <span class="tag">(T)</span></div>
+        <div class="spare-item">304703 <span class="tag">(T)</span></div><div class="spare-item">304012 <span class="tag">(T)</span></div>
+      </div>
+      <div class="spare-group"><div class="spare-group-label">Str. Trucks</div>
+        <div class="spare-item">401230</div><div class="spare-item">401549</div>
+        <div class="spare-item">401553</div><div class="spare-item">401600</div><div class="spare-item">401667</div>
+      </div>
+      <div class="spare-group"><div class="spare-group-label">LG 28ft</div>
+        <div class="spare-item">704374 <span class="tag">(T)</span></div><div class="spare-item">704376</div>
+        <div class="spare-item">704908</div><div class="spare-item">704675</div>
+      </div>
+      <div class="spare-group"><div class="spare-group-label">LG 32ft</div>
+        <div class="spare-item">706440</div><div class="spare-item">707896</div>
+      </div>
+      <div class="spare-group"><div class="spare-group-label">LG 48ft</div><div class="spare-item">706535</div></div>
+      <div style="font-size:10px;color:#aaa;margin-top:4px;">T = Training asset</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-title">🚐 Shuttles</div>
+      <div class="shuttle-row"><span class="shuttle-route">PM-PRC</span><span class="shuttle-asset">SPARE</span></div>
+      <div class="shuttle-row"><span class="shuttle-route">FLG</span><span class="shuttle-asset">402446</span></div>
+      <div class="shuttle-row"><span class="shuttle-route">YUM</span><span class="shuttle-asset">710341</span></div>
+      <div class="shuttle-row"><span class="shuttle-route">PRC</span><span class="shuttle-asset">402721</span></div>
+      <div class="shuttle-row"><span class="shuttle-route">DVT</span><span class="shuttle-asset">403286</span></div>
+      <div class="shuttle-row"><span class="shuttle-route">LHU</span><span class="shuttle-asset">403641</span></div>
+      <div class="shuttle-row"><span class="shuttle-route">SOW</span><span class="shuttle-asset">403640</span></div>
+      <div style="margin-top:8px;">
+        <div class="spare-group-label">Shuttle Spares</div>
+        <div class="spare-item">402519</div><div class="spare-item">401553</div>
+        <div class="spare-item">401549</div><div class="spare-item">401600</div><div class="spare-item">401667</div>
+      </div>
+      <div style="margin-top:8px;">
+        <div class="spare-group-label">M-Str. Trucks</div>
+        <div class="spare-item">403283</div><div class="spare-item">403285</div><div class="spare-item">402941</div>
+      </div>
+    </div>
+  </div>
+</div><!-- end panel-am -->
+
+<!-- ══════════════════════════ PM SHIFT ══════════════════════════ -->
+<div class="panel" id="panel-pm">
+  <div class="shift-header pm">
+    <div class="shift-title">🌙 PM SHIFT — Plan 8.1</div>
+    <div class="shift-sub">Mon – Fri &nbsp;|&nbsp; DURING P.M. OPS</div>
+  </div>
+  <div class="alert"><strong>⚠️ IMPORTANT</strong> If your trailer doesn't appear on this plan, go to the yard and drop it. Park tractor in designated tractor parking. Questions → ask yard director.</div>
+
+  <div class="overflow-key">
+    <div class="overflow-key-title">🔴 HWT Overflow Staging Areas</div>
+    <div class="overflow-area"><div class="oa-label a">Area A — Dr 20S · 21N · 21S</div><div class="oa-desc">Primary HWT overflow. If contract trailers staged here, HWT parks in front. No room → Area B.</div></div>
+    <div class="overflow-area"><div class="oa-label b">Area B — National Guard Fence</div><div class="oa-desc">Secondary overflow. Usually reserved for truck + trailer asset sets. Use when Area A is full.</div></div>
+    <div class="overflow-area"><div class="oa-label c">Area C — Dr 7N · 19S · 23S · 26S (Str. Truck spots)</div><div class="oa-desc">Customer Svc front / designated str. truck areas. Dr 7N max 2. Dr 23S leave room at 24N. Last resort.</div></div>
+  </div>
+
+  <div class="section-head">📍 Front — Dr 1–6</div>
+  <div class="door-list">
+    <div class="door-row empty-row"><div class="door-label">Dr 1</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+    <div class="door-row empty-row"><div class="door-label">Dr 2N</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+    <div class="door-row"><div class="door-label">Cust. Row</div><div class="door-content"><div><span class="badge badge-orange">Tractor (twin axle only)</span> <span class="badge badge-gray">Str. Truck</span> <span class="badge badge-gray">Str. Truck</span></div></div></div>
+    <div class="door-row"><div class="door-label">RENTAL</div><div class="door-content"><span class="badge badge-yellow">RENTAL truck</span> <span class="asset-num">← NPHOG</span></div></div>
+    <div class="door-row"><div class="door-label">Routes</div><div class="door-content"><span class="badge badge-blue">LHUA</span> <span class="badge badge-blue">FLGA</span> <span class="badge badge-blue">SOWA</span></div></div>
+    <div class="door-row"><div class="door-label">Vans</div><div class="door-content"><span class="badge badge-gray">Training van</span> <span class="badge badge-gray">Crew van</span></div></div>
+    <div class="door-row restricted"><div class="door-label">Dr 5</div><div class="door-content"><span class="no-park">F.O. Sort — NO Unauthorized Parking</span></div></div>
+  </div>
+
+  <div class="section-head">📍 Main Dock — Dr 7N–12S</div>
+  <div class="door-list">
+    <div class="door-row"><div class="door-label">Dr 7N</div><div class="door-content"><div><span class="badge badge-gray">Str. Truck</span> <span class="badge badge-gray">Str. Truck</span></div><div class="door-warn">Storage only — max 2 &nbsp;·&nbsp; HWT Overflow Area C</div></div></div>
+    <div class="door-row restricted"><div class="door-label">Dr 7S</div><div class="door-content"><span class="badge badge-gray">No Belt — Dock plate only</span></div></div>
+    <div class="door-row"><div class="door-label">Dr 8N</div><div class="door-content"><span class="badge badge-blue">Input belt</span></div></div>
+    <div class="door-row"><div class="door-label">Dr 8S</div><div class="door-content"><span class="badge badge-blue">Input belt</span></div></div>
+    <div class="door-row"><div class="door-label">Dr 9N</div><div class="door-content"><span class="badge badge-blue">Input belt</span></div></div>
+    <div class="door-row empty-row"><div class="door-label">Dr 9S</div><div class="door-content"><span class="badge badge-gray">Empty</span><div class="door-note">Overflow — 53' trailers &amp; inbound contract trailers as needed</div></div></div>
+    <div class="door-row empty-row"><div class="door-label">Dr 10N</div><div class="door-content"><span class="badge badge-gray">Empty</span><div class="door-note">Overflow — 53' trailers &amp; contract trailers as needed · Not for tractor storage</div></div></div>
+    <div class="door-row empty-row"><div class="door-label">Dr 10S</div><div class="door-content"><span class="badge badge-gray">Empty</span><div class="door-note">Overflow — 53' trailers &amp; contract trailers as needed · Not for tractor storage</div></div></div>
+    <div class="door-row"><div class="door-label">Junk Decking</div><div class="door-content"><span class="badge badge-green">Pallet Trailer</span><div class="door-warn">⛔ Reserved for Pallet Trailer ONLY</div></div></div>
+    <div class="door-row empty-row"><div class="door-label">Dr 11N</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+    <div class="door-row empty-row"><div class="door-label">Dr 11S</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+    <div class="door-row empty-row"><div class="door-label">Dr 12N</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+    <div class="door-row empty-row"><div class="door-label">Dr 12S</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+  </div>
+
+  <div class="section-head">📍 Mid Dock — Dr 13N–19N</div>
+  <div class="door-list">
+    <div class="door-row"><div class="door-label">Dr 13N</div><div class="door-content"><span class="badge badge-yellow">53' Trailer Overflow</span><div class="door-note">Separate dock</div></div></div>
+    <div class="door-row"><div class="door-label">Dr 13S</div><div class="door-content"><span class="badge badge-yellow">53' Trailer Overflow</span><div class="door-note">Separate dock</div></div></div>
+    <div class="door-row"><div class="door-label">Dr 14N</div><div class="door-content"><span class="badge badge-blue">LA Trailer</span></div></div>
+    <div class="door-row empty-row"><div class="door-label">Dr 14S</div><div class="door-content"><span class="badge badge-gray">Empty / Overflow</span></div></div>
+    <div class="door-row"><div class="door-label">Dr 15N</div><div class="door-content"><div><span class="badge badge-blue">LAX (PM)</span> <span class="badge badge-orange">Tractor 305224</span></div></div></div>
+    <div class="door-row empty-row"><div class="door-label">Dr 15S</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+    <div class="door-row empty-row"><div class="door-label">Dr 16N</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+    <div class="door-row empty-row"><div class="door-label">Dr 16S</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+    <div class="door-row empty-row"><div class="door-label">Dr 17N</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+    <div class="door-row empty-row"><div class="door-label">Dr 17S</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+    <div class="door-row"><div class="door-label">Dr 18N</div><div class="door-content"><span class="badge badge-teal">Softside Trailer</span></div></div>
+    <div class="door-row"><div class="door-label">Dr 18S</div><div class="door-content"><span class="badge badge-teal">Softside Trailer</span></div></div>
+    <div class="door-row"><div class="door-label">Dr 19N</div><div class="door-content"><span class="badge badge-teal">Softside Trailer</span></div></div>
+  </div>
+
+  <div class="section-head">📍 Lower Dock — Dr 19S–26S</div>
+  <div class="door-list">
+    <div class="door-row"><div class="door-label">Dr 19S</div><div class="door-content"><div><span class="badge badge-gray">Str. Truck</span> <span class="badge badge-gray">Str. Truck</span></div><div class="door-note">HWT Overflow Area C</div></div></div>
+    <div class="door-row"><div class="door-label">Dr 20N</div><div class="door-content"><span class="badge badge-purple">USPS</span><div class="door-note">Reserved for USPS PM ops</div></div></div>
+    <div class="door-row"><div class="door-label">Dr 20S</div><div class="door-content"><div><span class="badge badge-blue">RT 902</span> <span class="asset-num">402858</span></div><div class="wave-tag">2nd Wave · RAMP</div><div class="door-warn">⚠️ HWT Overflow Area A — if contract trailer staged, HWT parks in front. Full → Area B.</div></div></div>
+    <div class="door-row"><div class="door-label">Dr 21N</div><div class="door-content"><div><span class="badge badge-blue">RT 910</span> <span class="asset-num">305572 · 709552</span> <span class="wave-tag">3rd · RAMP</span></div><div><span class="badge badge-blue">RT 925</span> <span class="asset-num">304928 · 704674</span> <span class="wave-tag">2nd · DROP LOT</span></div><div class="door-warn">⚠️ HWT Overflow Area A — if contract trailer staged, HWT parks in front. Full → Area B.</div></div></div>
+    <div class="door-row"><div class="door-label">Dr 21S</div><div class="door-content"><div><span class="badge badge-blue">RT 911</span> <span class="asset-num">305753 · 710373</span> <span class="wave-tag">2nd · RAMP</span></div><div><span class="badge badge-blue">RT 912</span> <span class="asset-num">305201 · 709553</span> <span class="wave-tag">3rd · DROP LOT</span></div><div><span class="badge badge-blue">RT 934</span> <span class="asset-num">402721</span> <span class="wave-tag">1st · RAMP</span></div><div class="door-warn">⚠️ HWT Overflow Area A — if contract trailer staged, HWT parks in front. Full → Area B.</div></div></div>
+    <div class="door-row restricted"><div class="door-label">Dr 22N–23N</div><div class="door-content"><span class="no-park">Generator — NO PARKING</span></div></div>
+    <div class="door-row"><div class="door-label">Dr 23S</div><div class="door-content"><div><span class="badge badge-gray">Str. Truck</span> <span class="badge badge-gray">Str. Truck</span></div><div class="door-warn">⚠️ Leave space away from Dr 24N — trailer staging safety &nbsp;·&nbsp; HWT Overflow Area C</div></div></div>
+    <div class="door-row"><div class="door-label">Dr 24N</div><div class="door-content"><span class="badge badge-green">Ground Trailer</span><div class="door-note">Leave clearance — trailer staging safety</div></div></div>
+    <div class="door-row empty-row"><div class="door-label">Dr 24S</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+    <div class="door-row"><div class="door-label">Dr 25N</div><div class="door-content"><div><span class="badge badge-blue">RT 905</span> <span class="asset-num">402859</span> <span class="wave-tag">2nd · RAMP</span></div><div><span class="badge badge-blue">RT 908</span> <span class="asset-num">403022</span> <span class="wave-tag">3rd · RAMP</span></div><div><span class="badge badge-blue">RT 937</span> <span class="asset-num">306226 · 710341</span> <span class="wave-tag">1st · RAMP</span></div></div></div>
+    <div class="door-row"><div class="door-label">Dr 25S</div><div class="door-content"><div><span class="badge badge-blue">RT 903</span> <span class="asset-num">305414 · 708299</span></div><div class="wave-tag">2nd Wave · RAMP</div></div></div>
+    <div class="door-row"><div class="door-label">Dr 26</div><div class="door-content"><div><span class="badge badge-blue">RT 936</span> <span class="asset-num">306375 · 710342</span></div><div class="wave-tag">1st Wave · RAMP</div></div></div>
+    <div class="door-row"><div class="door-label">Dr 26S</div><div class="door-content"><div><span class="badge badge-gray">Str. Truck</span> <span class="badge badge-gray">Str. Truck</span></div><div class="door-note">HWT Overflow Area C</div></div></div>
+    <div class="door-row"><div class="door-label">INSIDE</div><div class="door-content"><div><span class="badge badge-blue">RT 930</span> <span class="asset-num">403286</span> <span class="wave-tag">RAMP</span></div><div><span class="badge badge-blue">RT 933</span> <span class="asset-num">403640</span> <span class="wave-tag">RAMP</span></div></div></div>
+  </div>
+
+  <div class="tractor-card">
+    <div class="tractor-card-title">🅿️ East Fence — Tractor &amp; HWT Parking</div>
+    <div class="tractor-rule">Twin axle — primary spots</div>
+    <div class="tractor-rule">Single axle — designated spots only</div>
+    <div class="tractor-rule warn">No parking past end of fence</div>
+    <div class="tractor-rule warn">Fire Hydrant area — NO PARKING</div>
+    <div class="tractor-rule">⚠️ Max 2 rows HWT vehicles by fence only</div>
+    <div class="tractor-rule">🚛 Yard Mule: 2 spots near Light Post, south east fence</div>
+  </div>
+
+  <div class="section-head">📦 HWT Truck List 2.0 — Rev. 9/20/2025</div>
+  <table class="hwt-table">
+    <tr><th>RT#</th><th>Truck#</th><th>Trailer#</th><th>Door</th><th>Wave</th></tr>
+    <tr><td>902</td><td class="mono">402858</td><td class="mono">—</td><td>Dr 20S</td><td>2nd · RAMP</td></tr>
+    <tr><td>903</td><td class="mono">305414</td><td class="mono">708299</td><td>Dr 25S</td><td>2nd · RAMP</td></tr>
+    <tr><td>904</td><td class="mono">403020</td><td class="mono">—</td><td>Dr 24N</td><td>3rd · RAMP</td></tr>
+    <tr><td>905</td><td class="mono">402859</td><td class="mono">—</td><td>Dr 25N</td><td>2nd · RAMP</td></tr>
+    <tr><td>906</td><td class="mono">403060</td><td class="mono">—</td><td>Dr 24S</td><td>3rd · RAMP</td></tr>
+    <tr><td>907</td><td class="mono">304924</td><td class="mono">709222</td><td>Dr 24N</td><td>2nd · RAMP</td></tr>
+    <tr><td>908</td><td class="mono">403022</td><td class="mono">—</td><td>Dr 25N</td><td>3rd · RAMP</td></tr>
+    <tr><td>910</td><td class="mono">305572</td><td class="mono">709552</td><td>Dr 21N</td><td>3rd · RAMP</td></tr>
+    <tr><td>911</td><td class="mono">305753</td><td class="mono">710373</td><td>Dr 21S</td><td>2nd · RAMP</td></tr>
+    <tr><td>912</td><td class="mono">305201</td><td class="mono">709553</td><td>Dr 21S</td><td>3rd · DROP LOT</td></tr>
+    <tr><td>914</td><td class="mono">304925</td><td class="mono">710378</td><td>Dr 24S</td><td>2nd · RAMP</td></tr>
+    <tr><td>920</td><td class="mono">304923</td><td class="mono">709228</td><td>Dr 20N</td><td>2nd · RAMP</td></tr>
+    <tr><td>925</td><td class="mono">304928</td><td class="mono">704674</td><td>Dr 21N</td><td>2nd · DROP LOT</td></tr>
+    <tr><td>930</td><td class="mono">403286</td><td class="mono">—</td><td>INSIDE</td><td>RAMP</td></tr>
+    <tr><td>931</td><td class="mono">402446</td><td class="mono">—</td><td>Dr 24N</td><td>1st · RAMP</td></tr>
+    <tr><td>932</td><td class="mono">403641</td><td class="mono">—</td><td>Dr 24S</td><td>1st · RAMP</td></tr>
+    <tr><td>933</td><td class="mono">403640</td><td class="mono">—</td><td>INSIDE</td><td>RAMP</td></tr>
+    <tr><td>934</td><td class="mono">402721</td><td class="mono">—</td><td>Dr 21S</td><td>1st · RAMP</td></tr>
+    <tr><td>936</td><td class="mono">306375</td><td class="mono">710342</td><td>Dr 26</td><td>1st · RAMP</td></tr>
+    <tr><td>937</td><td class="mono">306226</td><td class="mono">710341</td><td>Dr 25N</td><td>1st · RAMP</td></tr>
+  </table>
+  <div class="section-head">👤 PM Driver Assignments</div>
+  <table class="pm-table">
+    <tr><th>Driver</th><th>Emp #</th><th>Unit</th><th>Start</th></tr>
+    <tr><td>Vilma Mancia</td><td class="emp-num">3126889</td><td class="unit-num">305973</td><td class="start-time">1030</td></tr>
+    <tr><td>Kelly Hannan</td><td class="emp-num">4670180</td><td class="unit-num">305988</td><td class="start-time">1030</td></tr>
+    <tr><td>Lalo Kafaty</td><td class="emp-num">185054</td><td class="unit-num">305754</td><td class="start-time">1100</td></tr>
+    <tr><td>Rob McVickers</td><td class="emp-num">411734</td><td class="unit-num">305574</td><td class="start-time">1200</td></tr>
+    <tr><td>Gary Mollo</td><td class="emp-num">807507</td><td class="unit-num">305573</td><td class="start-time">1200</td></tr>
+    <tr><td>James Barragan</td><td class="emp-num">911406</td><td class="unit-num">306176</td><td class="start-time">1200</td></tr>
+    <tr><td>Drew Howe</td><td class="emp-num">3739868</td><td class="unit-num">305752</td><td class="start-time">1200</td></tr>
+    <tr><td>Enrique Martinez</td><td class="emp-num">5026040</td><td class="unit-num">305861</td><td class="start-time">1200</td></tr>
+    <tr><td>Otto Kazmer</td><td class="emp-num">144365</td><td class="unit-num">305439</td><td class="start-time">1200</td></tr>
+    <tr><td>Brian Chick</td><td class="emp-num">429890</td><td class="unit-num">305575</td><td class="start-time">1230</td></tr>
+    <tr><td>Hansel Cedillos</td><td class="emp-num">655184</td><td class="unit-num">306224</td><td class="start-time">1945</td></tr>
+  </table>
+
+  <div class="section-head">🔴 Out of Service (OOS)</div>
+  <table class="oos-table">
+    <tr><th>Unit</th><th>Issue</th><th>Spare</th><th>Status</th></tr>
+    <tr><td class="oos-unit">304926</td><td>Regen</td><td class="oos-spare">305574</td><td><span class="badge badge-red">Accident</span></td></tr>
+    <tr><td class="oos-unit">306225</td><td>AC</td><td class="oos-spare strikethrough">306178</td><td><span class="badge badge-yellow">PMD</span></td></tr>
+    <tr><td class="oos-unit">306224</td><td>Air Leaks</td><td>—</td><td><span class="badge badge-red">OOS</span></td></tr>
+  </table>
+
+  <div class="section-head">🚛 PM Spares</div>
+  <div class="door-list" style="border-radius:0 0 6px 6px;">
+    <div class="door-row"><div class="door-label">Row 1</div><div class="door-content"><span class="asset-num">302401 &nbsp;·&nbsp; 304012 &nbsp;·&nbsp; 303771 &nbsp;·&nbsp; 305216</span></div></div>
+    <div class="door-row"><div class="door-label">Row 2</div><div class="door-content"><span class="asset-num">304925 &nbsp;·&nbsp; 302634 &nbsp;·&nbsp; 304703 &nbsp;·&nbsp; 304924</span></div></div>
+    <div class="door-row"><div class="door-label">Row 3</div><div class="door-content"><span class="asset-num">305215 &nbsp;·&nbsp; 302401 &nbsp;·&nbsp; 304928 &nbsp;·&nbsp; 304923</span></div></div>
+    <div class="door-row"><div class="door-label">Row 4</div><div class="door-content"><span class="asset-num">305201 &nbsp;·&nbsp; 305200</span></div></div>
+  </div>
+
+</div><!-- end panel-pm -->
+
+<!-- ══════════════════════════ TRANSITION ══════════════════════════ -->
+<div class="panel" id="panel-tr">
+  <div class="shift-header tr">
+    <div class="shift-title">🔄 TRANSITION — Plan 8.3</div>
+    <div class="shift-sub">Between Shifts &nbsp;|&nbsp; Setup for Next Op</div>
+  </div>
+  <div class="tr-toggle">
+    <button class="tr-btn active" id="tr-btn-pm" onclick="showTr('pm')">After PM → Before AM</button>
+    <button class="tr-btn" id="tr-btn-am" onclick="showTr('am')">After AM → Before PM</button>
+  </div>
+
+  <!-- PM→AM -->
+  <div id="tr-pm">
+    <div class="alert alert-info"><strong>ℹ️ After PM — Staging for AM</strong><br>Docks 7–13 reserved for inbound/outbound with freight first. Stage Roller beds in any empty dock. <strong>Max 15 · Min 11 trailers.</strong></div>
+    <div class="section-head">📍 Dr 13N–19N — 53' Roller Staging</div>
+    <div class="door-list">
+      <div class="door-row"><div class="door-label">Dr 13N</div><div class="door-content"><span class="badge badge-blue">Trailer 53' Roller</span></div></div>
+      <div class="door-row"><div class="door-label">Dr 13S</div><div class="door-content"><span class="badge badge-blue">Trailer 53' Roller</span></div></div>
+      <div class="door-row"><div class="door-label">Dr 14N</div><div class="door-content"><span class="badge badge-blue">Trailer 53' Roller</span></div></div>
+      <div class="door-row"><div class="door-label">Dr 14S</div><div class="door-content"><span class="badge badge-blue">Trailer 53' Roller</span></div></div>
+      <div class="door-row"><div class="door-label">Dr 15N</div><div class="door-content"><span class="badge badge-blue">LAX</span> <span class="asset-num">306225</span></div></div>
+      <div class="door-row"><div class="door-label">Dr 15S</div><div class="door-content"><span class="badge badge-blue">Trailer 53' Roller</span></div></div>
+      <div class="door-row"><div class="door-label">Dr 16N</div><div class="door-content"><span class="badge badge-blue">Trailer 53' Roller</span> <span class="asset-num">← TUSR</span></div></div>
+      <div class="door-row"><div class="door-label">Dr 16S</div><div class="door-content"><span class="badge badge-blue">Trailer 53' Roller</span></div></div>
+      <div class="door-row"><div class="door-label">Dr 17N</div><div class="door-content"><span class="badge badge-blue">Trailer 53' Roller</span></div></div>
+      <div class="door-row"><div class="door-label">Dr 17S</div><div class="door-content"><span class="badge badge-blue">Trailer 53' Roller</span></div></div>
+      <div class="door-row"><div class="door-label">Dr 18N</div><div class="door-content"><span class="badge badge-blue">Trailer 53' Roller</span></div></div>
+      <div class="door-row"><div class="door-label">Dr 18S</div><div class="door-content"><span class="badge badge-purple">POSTAL</span></div></div>
+      <div class="door-row"><div class="door-label">Dr 19N</div><div class="door-content"><span class="badge badge-purple">POSTAL</span></div></div>
+    </div>
+    <div class="section-head">📍 Lower Dock — Dr 19S–26S &nbsp;<span style="font-weight:400;font-size:11px;opacity:0.8;">⏱ HWT staging ~Midnight–9am</span></div>
+    <div class="door-list">
+      <div class="door-row"><div class="door-label">Dr 19S</div><div class="door-content"><div><span class="badge badge-gray">Str. Truck</span> <span class="badge badge-gray">Str. Truck</span></div><div class="door-note">HWT Overflow Area C</div></div></div>
+      <div class="door-row"><div class="door-label">Dr 20N</div><div class="door-content"><div><span class="badge badge-blue">RT 920</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">304923 · 709228(32)</span></div><div class="wave-tag">2nd · RAMP</div></div></div>
+      <div class="door-row"><div class="door-label">Dr 20S</div><div class="door-content"><div><span class="badge badge-blue">RT 902</span> <span class="badge badge-gray">Str. Truck</span> <span class="asset-num">402858</span></div><div class="wave-tag">2nd · RAMP</div><div class="door-warn">⚠️ HWT Overflow Area A — contract trailer staged → HWT in front. Full → Area B.</div></div></div>
+      <div class="door-row"><div class="door-label">Dr 21N</div><div class="door-content"><div><span class="badge badge-blue">RT 910</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">305572 · 709552(32)</span> <span class="wave-tag">3rd · RAMP</span></div><div><span class="badge badge-blue">RT 925</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">304928 · 704674(28)</span> <span class="wave-tag">2nd · DROP LOT</span></div><div class="door-warn">⚠️ HWT Overflow Area A — contract trailer staged → HWT in front. Full → Area B.</div></div></div>
+      <div class="door-row"><div class="door-label">Dr 21S</div><div class="door-content"><div><span class="badge badge-blue">RT 911</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">305753 · 710373(32)</span> <span class="wave-tag">2nd · RAMP</span></div><div><span class="badge badge-blue">RT 912</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">305201 · 709553(32)</span> <span class="wave-tag">3rd · DROP LOT</span></div><div><span class="badge badge-blue">RT 934</span> <span class="badge badge-gray">Str. Truck</span> <span class="asset-num">402721</span> <span class="wave-tag">1st · RAMP</span></div><div class="door-warn">⚠️ HWT Overflow Area A — contract trailer staged → HWT in front. Full → Area B.</div></div></div>
+      <div class="door-row restricted"><div class="door-label">Dr 22N–23N</div><div class="door-content"><span class="no-park">Generator — NO PARKING</span><div class="door-note">Stopping OK — driver must stay with truck</div></div></div>
+      <div class="door-row"><div class="door-label">Dr 23S</div><div class="door-content"><div><span class="badge badge-gray">Str. Truck</span> <span class="badge badge-gray">Str. Truck</span></div><div class="door-warn">⚠️ Leave space from Dr 24N &nbsp;·&nbsp; HWT Overflow Area C</div></div></div>
+      <div class="door-row"><div class="door-label">Dr 24N</div><div class="door-content"><div><span class="badge badge-blue">RT 931</span> <span class="badge badge-gray">Str. Truck</span> <span class="asset-num">402446</span> <span class="wave-tag">1st · RAMP</span></div><div><span class="badge badge-blue">RT 907</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">304924 · 709222(32)</span> <span class="wave-tag">2nd · RAMP</span></div><div><span class="badge badge-blue">RT 904</span> <span class="badge badge-gray">Str. Truck</span> <span class="asset-num">403020</span> <span class="wave-tag">3rd · RAMP</span></div><div class="door-note">→ FLGA staging after HWT wraps</div></div></div>
+      <div class="door-row"><div class="door-label">Dr 24S</div><div class="door-content"><div><span class="badge badge-blue">RT 932</span> <span class="badge badge-gray">Str. Truck</span> <span class="asset-num">403641</span> <span class="wave-tag">1st · RAMP</span></div><div><span class="badge badge-blue">RT 914</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">304925 · 710378(32)</span> <span class="wave-tag">2nd · RAMP</span></div><div><span class="badge badge-blue">RT 906</span> <span class="badge badge-gray">Str. Truck</span> <span class="asset-num">403060</span> <span class="wave-tag">3rd · RAMP</span></div><div class="door-note">→ LHUA staging after HWT wraps</div></div></div>
+      <div class="door-row"><div class="door-label">Dr 25N</div><div class="door-content"><div><span class="badge badge-blue">RT 937</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">306226 · 710341(32)</span> <span class="wave-tag">1st · RAMP</span></div><div><span class="badge badge-blue">RT 905</span> <span class="badge badge-gray">Str. Truck</span> <span class="asset-num">402859</span> <span class="wave-tag">2nd · RAMP</span></div><div><span class="badge badge-blue">RT 908</span> <span class="badge badge-gray">Str. Truck</span> <span class="asset-num">403022</span> <span class="wave-tag">3rd · RAMP</span></div><div class="door-note">→ YUMA · 710341 · 306226 after HWT wraps</div></div></div>
+      <div class="door-row"><div class="door-label">Dr 25S</div><div class="door-content"><div><span class="badge badge-blue">RT 903</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">305414 · 708299(32)</span></div><div class="wave-tag">2nd · RAMP</div></div></div>
+      <div class="door-row"><div class="door-label">Dr 26N</div><div class="door-content"><div><span class="badge badge-blue">RT 936</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">306375 · 710342(32)</span></div><div class="wave-tag">1st · RAMP</div><div class="door-note">→ 710342 · 306375 · RT936 after HWT wraps</div></div></div>
+      <div class="door-row"><div class="door-label">Dr 26S</div><div class="door-content"><div><span class="badge badge-gray">Str. Truck</span> <span class="badge badge-gray">Str. Truck</span></div><div class="door-note">HWT Overflow Area C</div></div></div>
+    </div>
+    <div class="sat-note"><strong>🟡 53' Drybed — Tue–Fri Morning</strong>Chandler bulk trailer — Dr 25S area</div>
+    <div class="sat-note" style="margin-top:6px;"><strong>🟡 53' Ground Trailer — Saturday Morning Only</strong>Dr 20N — Saturday mornings only</div>
+    <div class="section-head" style="margin-top:12px;">📍 Front Area</div>
+    <div class="door-list">
+      <div class="door-row"><div class="door-label">Cust. Row</div><div class="door-content"><span class="badge badge-gray">Str. Truck</span> <span class="asset-num">401549 · 403022</span></div></div>
+      <div class="door-row"><div class="door-label">RENTAL</div><div class="door-content"><span class="badge badge-yellow">RENTAL truck</span> <span class="asset-num">← NPHOG</span></div></div>
+      <div class="door-row"><div class="door-label">Routes</div><div class="door-content"><span class="asset-num">403060</span> <span class="badge badge-blue">LHUA</span> <span class="asset-num">402446</span> <span class="badge badge-blue">FLGA</span> <span class="asset-num">403020</span> <span class="badge badge-blue">SOWA</span></div></div>
+      <div class="door-row"><div class="door-label">Vans</div><div class="door-content"><span class="badge badge-gray">Training van</span> <span class="badge badge-gray">Transport van</span></div></div>
+    </div>
+  </div><!-- end tr-pm -->
+
+  <!-- AM→PM -->
+  <div id="tr-am" style="display:none;">
+    <div class="alert alert-info"><strong>ℹ️ After AM — Staging for PM</strong><br>Stage pup trailers at Junk Decking and Dr 11N. Dr 9S gets TUS dry bed. Docks 7–13 priority for freight.</div>
+    <div class="section-head">📍 Main Dock — Dr 7N–12S</div>
+    <div class="door-list">
+      <div class="door-row"><div class="door-label">Dr 7N</div><div class="door-content"><div><span class="badge badge-gray">Str. Truck</span> <span class="badge badge-gray">Str. Truck</span></div><div class="door-warn">Storage only — max 2 &nbsp;·&nbsp; HWT Overflow Area C</div></div></div>
+      <div class="door-row restricted"><div class="door-label">Dr 7S</div><div class="door-content"><span class="badge badge-gray">No Belt — Dock plate only</span></div></div>
+      <div class="door-row"><div class="door-label">Dr 8N–9N</div><div class="door-content"><span class="badge badge-blue">Input belt</span></div></div>
+      <div class="door-row highlight"><div class="door-label">Dr 9S</div><div class="door-content"><span class="badge badge-yellow">TUS dry bed</span> <span class="asset-num">← 707236 or 709982</span><div class="door-note">Overflow — 53' &amp; contract trailers if TUS not in use</div></div></div>
+      <div class="door-row empty-row"><div class="door-label">Dr 10N</div><div class="door-content"><span class="badge badge-gray">Empty</span><div class="door-note">Overflow — 53' trailers &amp; contract trailers as needed · Not for tractor storage</div></div></div>
+      <div class="door-row empty-row"><div class="door-label">Dr 10S</div><div class="door-content"><span class="badge badge-gray">Empty</span><div class="door-note">Overflow — 53' trailers &amp; contract trailers as needed · Not for tractor storage</div></div></div>
+      <div class="door-row highlight"><div class="door-label">Junk Decking</div><div class="door-content"><span class="badge badge-green">Stage 1 — 2 liftgate pups</span><div class="asset-num">704675 or 704908</div></div></div>
+      <div class="door-row highlight"><div class="door-label">Dr 11N</div><div class="door-content"><span class="badge badge-green">Stage 2 — 3 rollerbed pups</span><div class="asset-num">702593 or 702625 or 702623</div></div></div>
+      <div class="door-row empty-row"><div class="door-label">Dr 11S</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+      <div class="door-row"><div class="door-label">Dr 12N</div><div class="door-content"><span class="badge badge-green">Ground</span></div></div>
+      <div class="door-row empty-row"><div class="door-label">Dr 12S</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+    </div>
+    <div class="section-head">📍 Mid Dock — Dr 13N–19N</div>
+    <div class="door-list">
+      <div class="door-row empty-row"><div class="door-label">Dr 13N–13S</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+      <div class="door-row"><div class="door-label">Dr 14N</div><div class="door-content"><span class="badge badge-blue">LAX (AM)</span></div></div>
+      <div class="door-row empty-row"><div class="door-label">Dr 14S</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+      <div class="door-row"><div class="door-label">Dr 15N</div><div class="door-content"><span class="badge badge-blue">LAX (PM)</span></div></div>
+      <div class="door-row empty-row"><div class="door-label">Dr 15S</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+      <div class="door-row highlight"><div class="door-label">Dr 16N</div><div class="door-content"><span class="badge badge-yellow">Overflow — Any Type</span><div class="door-note">Available for overflow of any type.</div></div></div>
+      <div class="door-row empty-row"><div class="door-label">Dr 16S</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+      <div class="door-row empty-row"><div class="door-label">Dr 17N</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+      <div class="door-row empty-row"><div class="door-label">Dr 17S</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+      <div class="door-row"><div class="door-label">Dr 18N</div><div class="door-content"><span class="asset-num">707154</span></div></div>
+      <div class="door-row"><div class="door-label">Dr 18S</div><div class="door-content"><span class="asset-num">707153</span></div></div>
+      <div class="door-row"><div class="door-label">Dr 19N</div><div class="door-content"><span class="asset-num">711000</span></div></div>
+    </div>
+    <div class="section-head">📍 Lower Dock — Dr 19S–26S</div>
+    <div class="door-list">
+      <div class="door-row"><div class="door-label">Dr 19S</div><div class="door-content"><div><span class="badge badge-gray">Str. Truck</span> <span class="badge badge-gray">Str. Truck</span></div><div class="door-note">HWT Overflow Area C</div></div></div>
+      <div class="door-row"><div class="door-label">Dr 20N</div><div class="door-content"><span class="badge badge-purple">POSTAL</span></div></div>
+      <div class="door-row empty-row"><div class="door-label">Dr 20S</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+      <div class="door-row"><div class="door-label">Dr 21N</div><div class="door-content"><span class="asset-num">704374 · 304012</span> <span class="badge badge-blue">← DVTA</span><div class="door-warn">⚠️ HWT Overflow Area A</div></div></div>
+      <div class="door-row"><div class="door-label">Dr 21S</div><div class="door-content"><span class="asset-num">709553 · 305201</span> <span class="badge badge-blue">← PRCA</span><div class="door-warn">⚠️ HWT Overflow Area A</div></div></div>
+      <div class="door-row restricted"><div class="door-label">Dr 22N–23N</div><div class="door-content"><span class="no-park">Generator — NO PARKING</span></div></div>
+      <div class="door-row"><div class="door-label">Dr 23S</div><div class="door-content"><div><span class="badge badge-gray">Str. Truck</span> <span class="badge badge-gray">Str. Truck</span></div><div class="door-warn">⚠️ Leave space from Dr 24N &nbsp;·&nbsp; HWT Overflow Area C</div></div></div>
+      <div class="door-row"><div class="door-label">Dr 24N</div><div class="door-content"><span class="badge badge-green">Ground</span> <span class="asset-num">710342 · 306375</span> <span class="badge badge-blue">→ RT936</span></div></div>
+      <div class="door-row"><div class="door-label">Dr 24S</div><div class="door-content"><span class="badge badge-green">Ground</span> <span class="asset-num">710341 · 306226</span> <span class="badge badge-blue">← YUMA</span></div></div>
+      <div class="door-row empty-row"><div class="door-label">Dr 25N–26N</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+      <div class="door-row"><div class="door-label">Dr 26S</div><div class="door-content"><div><span class="badge badge-gray">Str. Truck</span> <span class="badge badge-gray">Str. Truck</span></div><div class="door-note">HWT Overflow Area C</div></div></div>
+    </div>
+  </div><!-- end tr-am -->
+</div><!-- end panel-tr -->
+
+<!-- ══════════════════════════ FIND MY SPOT ══════════════════════════ -->
+<div class="panel" id="panel-fi">
+  <div class="search-wrap">
+    <div class="search-input-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" id="searchInput" type="text" placeholder="Asset #, door, route, trailer ID..." oninput="doSearch(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
+      <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
+    </div>
+    <div class="chips">
+      <span class="chip" onclick="doSearch('Vilma')">Vilma</span>
+      <span class="chip" onclick="doSearch('Kelly')">Kelly</span>
+      <span class="chip" onclick="doSearch('Lalo')">Lalo</span>
+      <span class="chip" onclick="doSearch('Rob')">Rob</span>
+      <span class="chip" onclick="doSearch('Gary')">Gary</span>
+      <span class="chip" onclick="doSearch('James')">James</span>
+      <span class="chip" onclick="doSearch('Drew')">Drew</span>
+      <span class="chip" onclick="doSearch('Enrique')">Enrique</span>
+      <span class="chip" onclick="doSearch('Otto')">Otto</span>
+      <span class="chip" onclick="doSearch('Brian')">Brian</span>
+      <span class="chip" onclick="doSearch('Hansel')">Hansel</span>
+      <span class="chip" onclick="doSearch('305224')">305224</span>
+      <span class="chip" onclick="doSearch('402858')">402858</span>
+      <span class="chip" onclick="doSearch('709553')">709553</span>
+      <span class="chip" onclick="doSearch('DVTA')">DVTA</span>
+      <span class="chip" onclick="doSearch('POSTAL')">POSTAL</span>
+      <span class="chip" onclick="doSearch('PRCA')">PRCA</span>
+      <span class="chip" onclick="doSearch('RTE 910')">RTE 910</span>
+      <span class="chip" onclick="doSearch('RTE 925')">RTE 925</span>
+      <span class="chip" onclick="doSearch('LAX')">LAX</span>
+      <span class="chip" onclick="doSearch('YUMA')">YUMA</span>
+      <span class="chip" onclick="doSearch('Junk Decking')">Junk Decking</span>
+      <span class="chip" onclick="doSearch('DROP LOT')">DROP LOT</span>
+      <span class="chip" onclick="doSearch('OOS')">OOS</span>
+      <span class="chip" onclick="doSearch('Overflow')">Overflow</span>
+      <span class="chip" onclick="doSearch('Spares')">Spares</span>
+      <span class="chip" onclick="doSearch('Shuttles')">Shuttles</span>
+    </div>
+    <div id="searchResults">
+      <div class="search-hint">👇 Search by anything<br><span style="font-size:11px;">Driver name · Emp# · Unit# · Tractor# · Trailer# · Door · Route</span></div>
+    </div>
+  </div>
+</div><!-- end panel-fi -->
+
+<!-- ══════════════════════════ SEND UPDATE (FEEDBACK) ══════════════════════════ -->
+<div class="panel" id="panel-fb">
+  <div class="shift-header" style="background:var(--green-dim);border-left:4px solid var(--green);margin-bottom:14px;">
+    <div class="shift-title">📨 Send an Update</div>
+    <div class="shift-sub">Spot conflict · Door issue · Asset change · General message</div>
+  </div>
+
+  <div class="fb-form" id="fbForm">
+
+    <div class="fb-field">
+      <label class="fb-label">Category</label>
+      <select class="fb-select" id="fbCat">
+        <option value="">— Select a type —</option>
+        <option value="🅿️ Spot Conflict">🅿️ Spot Conflict / Issue</option>
+        <option value="🚪 Door / Dock Problem">🚪 Door / Dock Problem</option>
+        <option value="🔄 Asset Update">🔄 Asset Update</option>
+        <option value="💬 General Message">💬 General Message</option>
+      </select>
+    </div>
+
+    <div class="fb-field">
+      <label class="fb-label">Door / Spot / Asset # &nbsp;<span style="font-weight:400;color:var(--text3);">(optional)</span></label>
+      <input class="fb-input" id="fbLoc" type="text" placeholder="e.g. Dr 21N · Tractor 305224 · RT 910..." autocomplete="off" autocorrect="off" spellcheck="false">
+    </div>
+
+    <div class="fb-field">
+      <label class="fb-label">Details</label>
+      <textarea class="fb-textarea" id="fbMsg" placeholder="Describe what's going on..."></textarea>
+    </div>
+
+    <button class="fb-btn" onclick="sendFeedback()">📲 Text the Yard Director</button>
+    <div class="fb-sent" id="fbSent">
+      ✅ SMS app opened — just hit Send!
+      <div class="fb-sent-sub">Your message was pre-filled. Tap send in the SMS app.</div>
+    </div>
+
+  </div>
+</div><!-- end panel-fb -->
+
+<div class="footer">PHX Cargo Yard &nbsp;·&nbsp; Rev. 12/31/24 · Upd. 4/10/26 &nbsp;·&nbsp; salmon-hertha-31.tiiny.site</div>
+
+<script>
+function updateClock() {
+  const now = new Date();
+  let h = now.getHours(), m = now.getMinutes(), ap = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  document.getElementById('clock').textContent = h+':'+(m+'').padStart(2,'0')+' '+ap+'  ·  Rev. 12/31/24 · Upd. 4/10/26';
+}
+updateClock(); setInterval(updateClock, 10000);
+
+const tabCls = {am:'active-am',pm:'active-pm',tr:'active-tr',fi:'active-fi',fb:'active-fb'};
+function showTab(t) {
+  ['am','pm','tr','fi','fb'].forEach(id => {
+    document.getElementById('tab-'+id).className='tab'+(id===t?' '+tabCls[id]:'');
+    document.getElementById('panel-'+id).classList.toggle('active',id===t);
+  });
+}
+
+// ── FEEDBACK / SMS SENDER ──
+const YARD_PHONE = '4804449649'; // ← replace with your actual number (digits only, e.g. 6025551234)
+function sendFeedback() {
+  const cat = document.getElementById('fbCat').value;
+  const loc = document.getElementById('fbLoc').value.trim();
+  const msg = document.getElementById('fbMsg').value.trim();
+  if (!cat) { alert('Please select a category first.'); return; }
+  if (!msg)  { alert('Please add some details.'); return; }
+  const now = new Date();
+  let h = now.getHours(), m = now.getMinutes(), ap = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  const time = h + ':' + String(m).padStart(2,'0') + ' ' + ap;
+  let body = '[PHX YARD UPDATE — ' + time + ']\n';
+  body += 'Type: ' + cat + '\n';
+  if (loc) body += 'Location: ' + loc + '\n';
+  body += 'Details: ' + msg;
+  // iOS uses ?body=, Android uses ?body= — both work via sms:
+  window.location.href = 'sms:' + YARD_PHONE + '?body=' + encodeURIComponent(body);
+  document.getElementById('fbSent').style.display = 'block';
+  // Reset form after short delay
+  setTimeout(() => {
+    document.getElementById('fbCat').value = '';
+    document.getElementById('fbLoc').value = '';
+    document.getElementById('fbMsg').value = '';
+    document.getElementById('fbSent').style.display = 'none';
+  }, 8000);
+}
+function showTr(t) {
+  document.getElementById('tr-pm').style.display=t==='pm'?'':'none';
+  document.getElementById('tr-am').style.display=t==='am'?'':'none';
+  document.getElementById('tr-btn-pm').className='tr-btn'+(t==='pm'?' active':'');
+  document.getElementById('tr-btn-am').className='tr-btn'+(t==='am'?' active':'');
+}
+
+const DB=[
+  {s:'am',d:'Dr 1',a:'Empty',n:''},
+  {s:'am',d:'Dr 2N',a:'Empty',n:''},
+  {s:'am',d:'Cust. Row',a:'Tractor + Str. Truck x2',n:'Twin axle tractor only'},
+  {s:'am',d:'RENTAL',a:'RENTAL truck',n:'← NPHOG'},
+  {s:'am',d:'Routes',a:'LHUA · FLGA · SOWA',n:''},
+  {s:'am',d:'Vans',a:'Training van · Transport van',n:''},
+  {s:'am',d:'Dr 5',a:'F.O. Sort — NO Unauthorized Parking',n:'⚠️ Restricted'},
+  {s:'am',d:'Dr 6',a:'Building Entrance Ramp',n:''},
+  {s:'am',d:'Dr 7N',a:'Str. Truck x2 — Storage only max 2',n:'⚠️ HWT Overflow Area C'},
+  {s:'am',d:'Dr 7S',a:'No Belt — Dock plate only',n:''},
+  {s:'am',d:'Dr 8N',a:'Input belt',n:''},
+  {s:'am',d:'Dr 8S',a:'Input belt',n:''},
+  {s:'am',d:'Dr 9N',a:'Input belt',n:''},
+  {s:'am',d:'Dr 9S',a:'Empty',n:'Overflow — 53\' trailers & inbound contract trailers as needed'},
+  {s:'am',d:'Dr 10N',a:'Empty',n:'Overflow — 53\' & contract trailers as needed · Not for tractor storage'},
+  {s:'am',d:'Dr 10S',a:'Empty',n:'Overflow — 53\' & contract trailers as needed · Not for tractor storage'},
+  {s:'am',d:'Junk Decking',a:'Pallet Trailer ONLY',n:'⛔ Reserved — no other vehicles'},
+  {s:'am',d:'Dr 11N',a:'Empty',n:''},
+  {s:'am',d:'Dr 11S',a:'Empty',n:''},
+  {s:'am',d:'Dr 12N',a:'Empty',n:''},
+  {s:'am',d:'Dr 12S',a:'Empty',n:''},
+  {s:'am',d:'Dr 13N',a:"53' Overflow / Inbound Contract — Separate dock",n:'⚠️ ~10am–Noon. Station Couriers.'},
+  {s:'am',d:'Dr 13S',a:"53' Overflow / Inbound Contract — Separate dock",n:'⚠️ ~10am–Noon. Station Couriers.'},
+  {s:'am',d:'Dr 14N',a:'LA Trailer + Tractor 305224',n:'Station Couriers'},
+  {s:'am',d:'Dr 14S',a:'Empty / Overflow',n:''},
+  {s:'am',d:'Dr 15N',a:'SCFA',n:''},
+  {s:'am',d:'Dr 15S',a:'ZSYA',n:''},
+  {s:'am',d:'Dr 16N',a:'Overflow — Any Type',n:'Available for overflow of any type'},
+  {s:'am',d:'Dr 16S',a:'LUFA · TUSA',n:''},
+  {s:'am',d:'Dr 17N',a:'LUFA',n:''},
+  {s:'am',d:'Dr 17S',a:'LUFA',n:''},
+  {s:'am',d:'Dr 18N',a:'Stage Softside ~10am–Noon (AM→PM)',n:'Stage 3 softsides across 18N · 18S · 19N'},
+  {s:'am',d:'Dr 18S',a:'Stage Softside ~10am–Noon (AM→PM)',n:'Stage 3 softsides across 18N · 18S · 19N'},
+  {s:'am',d:'Dr 19N',a:'Stage Softside ~10am–Noon (AM→PM)',n:'Stage 3 softsides across 18N · 18S · 19N'},
+  {s:'am',d:'Dr 19S',a:'Str. Truck x2',n:'HWT Overflow Area C'},
+  {s:'am',d:'Dr 20N',a:'RT 920 · Tractor+Pup · 304923 · 709228(32)',n:'2nd Wave · RAMP · HWT ops ~Midnight–9am'},
+  {s:'am',d:'Dr 20S',a:'RT 902 · Str. Truck · 402858',n:'2nd Wave · RAMP · ⚠️ HWT Overflow Area A'},
+  {s:'am',d:'Dr 21N',a:'RT 910 · Tractor+Pup · 305572 · 709552(32) (3rd RAMP) | RT 925 · Tractor+Pup · 304928 · 704674(28) (2nd DROP LOT)',n:'⚠️ HWT Overflow Area A'},
+  {s:'am',d:'Dr 21S',a:'RT 911 · Tractor+Pup · 305753 · 710373(32) (2nd RAMP) | RT 912 · Tractor+Pup · 305201 · 709553(32) (3rd DROP LOT) | RT 934 · Str. Truck · 402721 (1st RAMP)',n:'⚠️ HWT Overflow Area A'},
+  {s:'am',d:'Dr 22N–23N',a:'Generator — NO PARKING',n:'Stopping OK — driver must stay with truck'},
+  {s:'am',d:'Dr 23S',a:'Str. Truck x2',n:'⚠️ Leave space from Dr 24N · HWT Overflow Area C'},
+  {s:'am',d:'Dr 24N',a:'RT 931 · Str. Truck · 402446 (1st) | RT 907 · Tractor+Pup · 304924 · 709222(32) (2nd) | RT 904 · Str. Truck · 403020 (3rd)',n:'RAMP'},
+  {s:'am',d:'Dr 24S',a:'RT 932 · Str. Truck · 403641 (1st) | RT 914 · Tractor+Pup · 304925 · 710378(32) (2nd) | RT 906 · Str. Truck · 403060 (3rd)',n:'RAMP'},
+  {s:'am',d:'Dr 25N',a:'RT 937 · Tractor+Pup · 306226 · 710341(32) (1st) | RT 905 · Str. Truck · 402859 (2nd) | RT 908 · Str. Truck · 403022 (3rd)',n:'RAMP'},
+  {s:'am',d:'Dr 25S',a:'RT 903 · Tractor+Pup · 305414 · 708299(32)',n:'2nd Wave · RAMP'},
+  {s:'am',d:'Dr 26',a:'RT 936 · Tractor+Pup · 306375 · 710342(32)',n:'1st Wave · RAMP'},
+  {s:'am',d:'Dr 26S',a:'Str. Truck x2',n:'HWT Overflow Area C'},
+  {s:'am',d:'INSIDE',a:'RT 930 · Str. Truck · 403286 (RAMP) | RT 933 · Str. Truck · 403640 (RAMP)',n:''},
+  {s:'pm',d:'Dr 1',a:'Empty',n:''},
+  {s:'pm',d:'Dr 2N',a:'Empty',n:''},
+  {s:'pm',d:'Cust. Row',a:'Tractor (twin axle only) + Str. Truck x2',n:''},
+  {s:'pm',d:'RENTAL',a:'RENTAL truck',n:'← NPHOG'},
+  {s:'pm',d:'Routes',a:'LHUA · FLGA · SOWA',n:''},
+  {s:'pm',d:'Vans',a:'Training van · Crew van',n:''},
+  {s:'pm',d:'Dr 5',a:'F.O. Sort — NO Unauthorized Parking',n:''},
+  {s:'pm',d:'Dr 7N',a:'Str. Truck x2 — Storage only max 2',n:'⚠️ HWT Overflow Area C'},
+  {s:'pm',d:'Dr 7S',a:'No Belt — Dock plate only',n:''},
+  {s:'pm',d:'Dr 8N',a:'Input belt',n:''},
+  {s:'pm',d:'Dr 8S',a:'Input belt',n:''},
+  {s:'pm',d:'Dr 9N',a:'Input belt',n:''},
+  {s:'pm',d:'Dr 9S',a:'Empty',n:'Overflow — 53\' trailers & inbound contract trailers as needed'},
+  {s:'pm',d:'Dr 10N',a:'Empty',n:'Overflow — 53\' & contract trailers as needed · Not for tractor storage'},
+  {s:'pm',d:'Dr 10S',a:'Empty',n:'Overflow — 53\' & contract trailers as needed · Not for tractor storage'},
+  {s:'pm',d:'Junk Decking',a:'Pallet Trailer ONLY',n:'⛔ Reserved — no other vehicles'},
+  {s:'pm',d:'Dr 11N',a:'Empty',n:''},
+  {s:'pm',d:'Dr 11S',a:'Empty',n:''},
+  {s:'pm',d:'Dr 12N',a:'Empty',n:''},
+  {s:'pm',d:'Dr 12S',a:'Empty',n:''},
+  {s:'pm',d:'Dr 13N',a:"53' Trailer Overflow — Separate dock",n:''},
+  {s:'pm',d:'Dr 13S',a:"53' Trailer Overflow — Separate dock",n:''},
+  {s:'pm',d:'Dr 14N',a:'LA Trailer',n:'Tractor 305224 moved to Dr 15N'},
+  {s:'pm',d:'Dr 14S',a:'Empty / Overflow',n:''},
+  {s:'pm',d:'Dr 15N',a:'LAX (PM) + Tractor 305224',n:''},
+  {s:'pm',d:'Dr 15S',a:'Empty',n:''},
+  {s:'pm',d:'Dr 16N',a:'Overflow — Any Type',n:'Available for overflow of any type'},
+  {s:'pm',d:'Dr 16S',a:'Empty',n:''},
+  {s:'pm',d:'Dr 17N',a:'Empty',n:''},
+  {s:'pm',d:'Dr 17S',a:'Empty',n:''},
+  {s:'pm',d:'Dr 18N',a:'Softside Trailer',n:''},
+  {s:'pm',d:'Dr 18S',a:'Softside Trailer',n:''},
+  {s:'pm',d:'Dr 19N',a:'Softside Trailer',n:''},
+  {s:'pm',d:'Dr 19S',a:'Str. Truck x2',n:'HWT Overflow Area C'},
+  {s:'pm',d:'Dr 20N',a:'USPS — Reserved for USPS PM ops',n:''},
+  {s:'pm',d:'Dr 20S',a:'RT 902 · Truck 402858',n:'2nd Wave · RAMP · ⚠️ HWT Overflow Area A'},
+  {s:'pm',d:'Dr 21N',a:'RT 910 · 305572 · 709552 (3rd RAMP) | RT 925 · 304928 · 704674 (2nd DROP LOT)',n:'⚠️ HWT Overflow Area A'},
+  {s:'pm',d:'Dr 21S',a:'RT 911 · 305753 · 710373 (2nd RAMP) | RT 912 · 305201 · 709553 (3rd DROP LOT) | RT 934 · 402721 (1st RAMP)',n:'⚠️ HWT Overflow Area A'},
+  {s:'pm',d:'Dr 22N–23N',a:'Generator — NO PARKING',n:''},
+  {s:'pm',d:'Dr 23S',a:'Str. Truck x2',n:'⚠️ Leave space from Dr 24N · HWT Overflow Area C'},
+  {s:'pm',d:'Dr 24N',a:'Ground Trailer',n:'Leave clearance — trailer staging safety'},
+  {s:'pm',d:'Dr 24S',a:'Empty',n:''},
+  {s:'pm',d:'Dr 25N',a:'RT 905 · 402859 (2nd) | RT 908 · 403022 (3rd) | RT 937 · 306226 · 710341 (1st)',n:'RAMP'},
+  {s:'pm',d:'Dr 25S',a:'RT 903 · 305414 · 708299',n:'2nd Wave · RAMP'},
+  {s:'pm',d:'Dr 26',a:'RT 936 · 306375 · 710342',n:'1st Wave · RAMP'},
+  {s:'pm',d:'Dr 26S',a:'Str. Truck x2',n:'HWT Overflow Area C'},
+  {s:'pm',d:'INSIDE',a:'RT 930 · 403286 (RAMP) | RT 933 · 403640 (RAMP)',n:''},
+  {s:'tr',d:'Dr 13N (PM→AM)',a:"Trailer 53' Roller",n:''},
+  {s:'tr',d:'Dr 13S (PM→AM)',a:"Trailer 53' Roller",n:''},
+  {s:'tr',d:'Dr 14N (PM→AM)',a:"Trailer 53' Roller",n:''},
+  {s:'tr',d:'Dr 14S (PM→AM)',a:"Trailer 53' Roller",n:''},
+  {s:'tr',d:'Dr 15N (PM→AM)',a:'LAX · 306225',n:''},
+  {s:'tr',d:'Dr 15S (PM→AM)',a:"Trailer 53' Roller",n:''},
+  {s:'tr',d:'Dr 16N (PM→AM)',a:"Trailer 53' Roller ← TUSR",n:''},
+  {s:'tr',d:'Dr 16S (PM→AM)',a:"Trailer 53' Roller",n:''},
+  {s:'tr',d:'Dr 17N (PM→AM)',a:"Trailer 53' Roller",n:''},
+  {s:'tr',d:'Dr 17S (PM→AM)',a:"Trailer 53' Roller",n:''},
+  {s:'tr',d:'Dr 18N (PM→AM)',a:"Trailer 53' Roller",n:''},
+  {s:'tr',d:'Dr 18S (PM→AM)',a:'POSTAL',n:''},
+  {s:'tr',d:'Dr 19N (PM→AM)',a:'POSTAL',n:''},
+  {s:'tr',d:'Dr 19S (PM→AM)',a:'Str. Truck x2',n:'HWT Overflow Area C'},
+  {s:'tr',d:'Dr 20N (PM→AM)',a:'RT 920 · Tractor+Pup · 304923 · 709228(32)',n:'2nd RAMP · HWT ~Midnight–9am'},
+  {s:'tr',d:'Dr 20S (PM→AM)',a:'RT 902 · Str. Truck · 402858',n:'2nd RAMP · ⚠️ HWT Overflow Area A'},
+  {s:'tr',d:'Dr 21N (PM→AM)',a:'RT 910 · Tractor+Pup · 305572 · 709552(32) (3rd RAMP) | RT 925 · Tractor+Pup · 304928 · 704674(28) (2nd DROP LOT)',n:'⚠️ HWT Overflow Area A'},
+  {s:'tr',d:'Dr 21S (PM→AM)',a:'RT 911 · Tractor+Pup · 305753 · 710373(32) (2nd RAMP) | RT 912 · Tractor+Pup · 305201 · 709553(32) (3rd DROP LOT) | RT 934 · Str. Truck · 402721 (1st RAMP)',n:'⚠️ HWT Overflow Area A'},
+  {s:'tr',d:'Dr 23S (PM→AM)',a:'Str. Truck x2',n:'⚠️ Leave space from Dr 24N · HWT Overflow Area C'},
+  {s:'tr',d:'Dr 24N (PM→AM)',a:'RT 931 · Str. Truck · 402446 (1st) | RT 907 · Tractor+Pup · 304924 · 709222(32) (2nd) | RT 904 · Str. Truck · 403020 (3rd) → FLGA after HWT',n:'RAMP'},
+  {s:'tr',d:'Dr 24S (PM→AM)',a:'RT 932 · Str. Truck · 403641 (1st) | RT 914 · Tractor+Pup · 304925 · 710378(32) (2nd) | RT 906 · Str. Truck · 403060 (3rd) → LHUA after HWT',n:'RAMP'},
+  {s:'tr',d:'Dr 25N (PM→AM)',a:'RT 937 · Tractor+Pup · 306226 · 710341(32) (1st) | RT 905 · Str. Truck · 402859 (2nd) | RT 908 · Str. Truck · 403022 (3rd) → YUMA after HWT',n:'RAMP'},
+  {s:'tr',d:'Dr 25S (PM→AM)',a:'RT 903 · Tractor+Pup · 305414 · 708299(32)',n:'2nd RAMP · Postal Dry Bed (Chandler) staged here Tue–Fri after HWT wraps'},
+  {s:'tr',d:'Dr 26N (PM→AM)',a:'RT 936 · Tractor+Pup · 306375 · 710342(32)',n:'1st RAMP → 710342 · 306375 · RT936 staging after HWT wraps'},
+  {s:'tr',d:'Dr 26S (PM→AM)',a:'Str. Truck x2',n:'HWT Overflow Area C'},
+  {s:'tr',d:'Dr 7N (AM→PM)',a:'Str. Truck x2 — Storage only max 2',n:'HWT Overflow Area C'},
+  {s:'tr',d:'Dr 8N–9N (AM→PM)',a:'Input belt',n:''},
+  {s:'tr',d:'Dr 9S (AM→PM)',a:'TUS dry bed ← 707236 or 709982',n:'Overflow — 53\' & contract trailers if TUS not in use'},
+  {s:'tr',d:'Dr 10N (AM→PM)',a:'Empty',n:'Overflow — 53\' & contract trailers as needed · Not for tractor storage'},
+  {s:'tr',d:'Dr 10S (AM→PM)',a:'Empty',n:'Overflow — 53\' & contract trailers as needed · Not for tractor storage'},
+
+  /* ── HWT TRUCK LIST 2.0 — REV 9/20/2025 (photo) — full cross-reference ── */
+  /* Spare Tractors */
+  {s:'all',d:'Spare Tractor 301513',a:'Available — not assigned to route',n:'HWT Spare Tractor'},
+  {s:'all',d:'Spare Tractor 303771',a:'Training asset (T)',n:'HWT Spare Tractor'},
+  {s:'all',d:'Spare Tractor 304703',a:'Training asset (T)',n:'HWT Spare Tractor'},
+  {s:'all',d:'Spare Tractor 304012',a:'Training asset (T)',n:'HWT Spare Tractor'},
+  /* Spare Straight Trucks */
+  {s:'all',d:'Spare Str. Truck 401230',a:'Available',n:'HWT Spare Straight Truck'},
+  {s:'all',d:'Spare Str. Truck 401549',a:'Available / Shuttle spare',n:'HWT Spare Straight Truck'},
+  {s:'all',d:'Spare Str. Truck 401553',a:'Available / Shuttle spare',n:'HWT Spare Straight Truck'},
+  {s:'all',d:'Spare Str. Truck 401600',a:'Available / Shuttle spare',n:'HWT Spare Straight Truck'},
+  {s:'all',d:'Spare Str. Truck 401667',a:'Available / Shuttle spare',n:'HWT Spare Straight Truck'},
+  /* Spare Lift Gate 28ft */
+  {s:'all',d:'Lift Gate 28ft — 704374',a:'Training asset (T)',n:'Spare lift gate pup'},
+  {s:'all',d:'Lift Gate 28ft — 704376',a:'Available',n:'Spare lift gate pup'},
+  {s:'all',d:'Lift Gate 28ft — 704908',a:'Available',n:'Spare lift gate pup'},
+  {s:'all',d:'Lift Gate 28ft — 704675',a:'Available',n:'Spare lift gate pup'},
+  /* Spare Lift Gate 32ft */
+  {s:'all',d:'Lift Gate 32ft — 706440',a:'Available',n:'Spare lift gate pup'},
+  {s:'all',d:'Lift Gate 32ft — 707896',a:'Available',n:'Spare lift gate pup'},
+  /* Spare Lift Gate 48ft */
+  {s:'all',d:'Lift Gate 48ft — 706535',a:'Available',n:'Spare lift gate pup'},
+  /* Shuttles */
+  {s:'all',d:'Shuttle PM-PRC',a:'SPARE — no fixed asset',n:'Shuttle route'},
+  {s:'all',d:'Shuttle FLG — 402446',a:'Flagstaff shuttle',n:'Shuttle Spare pool'},
+  {s:'all',d:'Shuttle YUM — 710341',a:'Yuma shuttle',n:'Shuttle Spare pool'},
+  {s:'all',d:'Shuttle PRC — 402721',a:'Prescott shuttle',n:'Shuttle Spare pool'},
+  {s:'all',d:'Shuttle DVT — 403286',a:'Deer Valley shuttle',n:'Shuttle Spare pool'},
+  {s:'all',d:'Shuttle LHU — 403641',a:'Lake Havasu shuttle',n:'Shuttle Spare pool'},
+  {s:'all',d:'Shuttle SOW — 403640',a:'Show Low shuttle',n:'Shuttle Spare pool'},
+  /* Shuttle Spares */
+  {s:'all',d:'Shuttle Spare 402519',a:'Available for any shuttle',n:''},
+  {s:'all',d:'Shuttle Spare 401553',a:'Available for any shuttle',n:''},
+  {s:'all',d:'Shuttle Spare 401549',a:'Available for any shuttle',n:''},
+  {s:'all',d:'Shuttle Spare 401600',a:'Available for any shuttle',n:''},
+  {s:'all',d:'Shuttle Spare 401667',a:'Available for any shuttle',n:''},
+  /* M-Straight Trucks */
+  {s:'all',d:'M-Str. Truck 403283',a:'Available',n:'M-Straight Truck'},
+  {s:'all',d:'M-Str. Truck 403285',a:'Available',n:'M-Straight Truck'},
+  {s:'all',d:'M-Str. Truck 402941',a:'Available',n:'M-Straight Truck'},
+  {s:'tr',d:'Dr 11N (AM→PM)',a:'Stage 2 — 3 rollerbed pups: 702593 or 702625 or 702623',n:''},
+  {s:'tr',d:'Dr 12N (AM→PM)',a:'Ground',n:''},
+  {s:'tr',d:'Dr 14N (AM→PM)',a:'LAX (AM)',n:''},
+  {s:'tr',d:'Dr 15N (AM→PM)',a:'LAX (PM)',n:''},
+  {s:'tr',d:'Dr 18N (AM→PM)',a:'707154',n:''},
+  {s:'tr',d:'Dr 18S (AM→PM)',a:'707153',n:''},
+  {s:'tr',d:'Dr 19N (AM→PM)',a:'711000',n:''},
+  {s:'tr',d:'Dr 19S (AM→PM)',a:'Str. Truck x2',n:'HWT Overflow Area C'},
+  {s:'tr',d:'Dr 20N (AM→PM)',a:'POSTAL',n:''},
+  {s:'tr',d:'Dr 21N (AM→PM)',a:'704374 · 304012 ← DVTA',n:'⚠️ HWT Overflow Area A'},
+  {s:'tr',d:'Dr 21S (AM→PM)',a:'709553 · 305201 ← PRCA',n:'⚠️ HWT Overflow Area A'},
+  {s:'tr',d:'Dr 23S (AM→PM)',a:'Str. Truck x2',n:'⚠️ Leave space from Dr 24N · HWT Overflow Area C'},
+  {s:'tr',d:'Dr 24N (AM→PM)',a:'Ground · 710342 · 306375 → RT936',n:''},
+  {s:'tr',d:'Dr 24S (AM→PM)',a:'Ground · 710341 · 306226 ← YUMA',n:''},
+  {s:'tr',d:'Dr 26S (AM→PM)',a:'Str. Truck x2',n:'HWT Overflow Area C'},
+  {s:'all',d:'Spares — Tractors',a:'301513 · 303771(T) · 304703(T) · 304012(T)',n:'T = Training asset'},
+  {s:'all',d:'Spares — Str. Trucks',a:'401230 · 401549 · 401553 · 401600 · 401667',n:''},
+  {s:'all',d:'Spares — Lift Gate 28ft',a:'704374(T) · 704376 · 704908 · 704675',n:''},
+  {s:'all',d:'Spares — Lift Gate 32ft',a:'706440 · 707896',n:''},
+  {s:'all',d:'Spares — Lift Gate 48ft',a:'706535',n:''},
+  {s:'all',d:'Shuttle — PM-PRC',a:'SPARE',n:''},
+  {s:'all',d:'Shuttle — FLG',a:'402446',n:'Spare: 401553'},
+  {s:'all',d:'Shuttle — YUM',a:'710341',n:'Spare: 401549'},
+  {s:'all',d:'Shuttle — PRC',a:'402721',n:'Spare: 401600'},
+  {s:'all',d:'Shuttle — DVT',a:'403286',n:'Spare: 401667'},
+  {s:'all',d:'Shuttle — LHU',a:'403641',n:''},
+  {s:'all',d:'Shuttle — SOW',a:'403640',n:''},
+  {s:'all',d:'Shuttle Spares',a:'402519 · 401553 · 401549 · 401600 · 401667',n:''},
+  {s:'all',d:'M-Str. Trucks',a:'403283 · 403285 · 402941',n:''},
+  {s:'all',d:'HWT RT 902',a:'Truck 402858 · Dr 20S · 2nd RAMP',n:''},
+  {s:'all',d:'HWT RT 903',a:'Truck 305414 · Trailer 708299 · Dr 25S · 2nd RAMP',n:''},
+  {s:'all',d:'HWT RT 904',a:'Truck 403020 · Dr 24N · 3rd RAMP',n:''},
+  {s:'all',d:'HWT RT 905',a:'Truck 402859 · Dr 25N · 2nd RAMP',n:''},
+  {s:'all',d:'HWT RT 906',a:'Truck 403060 · Dr 24S · 3rd RAMP',n:''},
+  {s:'all',d:'HWT RT 907',a:'Truck 304924 · Trailer 709222 · Dr 24N · 2nd RAMP',n:''},
+  {s:'all',d:'HWT RT 908',a:'Truck 403022 · Dr 25N · 3rd RAMP',n:''},
+  {s:'all',d:'HWT RT 910',a:'Truck 305572 · Trailer 709552 · Dr 21N · 3rd RAMP',n:''},
+  {s:'all',d:'HWT RT 911',a:'Truck 305753 · Trailer 710373 · Dr 21S · 2nd RAMP',n:''},
+  {s:'all',d:'HWT RT 912',a:'Truck 305201 · Trailer 709553 · Dr 21S · 3rd DROP LOT',n:''},
+  {s:'all',d:'HWT RT 914',a:'Truck 304925 · Trailer 710378 · Dr 24S · 2nd RAMP',n:''},
+  {s:'all',d:'HWT RT 920',a:'Truck 304923 · Trailer 709228 · Dr 20N · 2nd RAMP',n:''},
+  {s:'all',d:'HWT RT 925',a:'Truck 304928 · Trailer 704674 · Dr 21N · 2nd DROP LOT',n:''},
+  {s:'all',d:'HWT RT 930',a:'Truck 403286 · INSIDE · RAMP',n:''},
+  {s:'all',d:'HWT RT 931',a:'Truck 402446 · Dr 24N · 1st RAMP',n:''},
+  {s:'all',d:'HWT RT 932',a:'Truck 403641 · Dr 24S · 1st RAMP',n:''},
+  {s:'all',d:'HWT RT 933',a:'Truck 403640 · INSIDE · RAMP',n:''},
+  {s:'all',d:'HWT RT 934',a:'Truck 402721 · Dr 21S · 1st RAMP',n:''},
+  {s:'all',d:'HWT RT 936',a:'Truck 306375 · Trailer 710342 · Dr 26 · 1st RAMP',n:''},
+  {s:'all',d:'HWT RT 937',a:'Truck 306226 · Trailer 710341 · Dr 25N · 1st RAMP',n:''},
+
+  /* ── PM DRIVERS ── */
+  {s:'pm',d:'Vilma Mancia',a:'Unit 305973',n:'Emp# 3126889 · Start 1030'},
+  {s:'pm',d:'Kelly Hannan',a:'Unit 305988',n:'Emp# 4670180 · Start 1030'},
+  {s:'pm',d:'Lalo Kafaty',a:'Unit 305754',n:'Emp# 185054 · Start 1100'},
+  {s:'pm',d:'Rob McVickers',a:'Unit 305574',n:'Emp# 411734 · Start 1200'},
+  {s:'pm',d:'Gary Mollo',a:'Unit 305573',n:'Emp# 807507 · Start 1200'},
+  {s:'pm',d:'James Barragan',a:'Unit 306176',n:'Emp# 911406 · Start 1200'},
+  {s:'pm',d:'Drew Howe',a:'Unit 305752',n:'Emp# 3739868 · Start 1200'},
+  {s:'pm',d:'Enrique Martinez',a:'Unit 305861',n:'Emp# 5026040 · Start 1200'},
+  {s:'pm',d:'Otto Kazmer',a:'Unit 305439',n:'Emp# 144365 · Start 1200'},
+  {s:'pm',d:'Brian Chick',a:'Unit 305575',n:'Emp# 429890 · Start 1230'},
+  {s:'pm',d:'Hansel Cedillos',a:'Unit 306224',n:'Emp# 655184 · Start 1945'},
+
+  /* ── PM DRIVER UNITS (searchable by unit#) ── */
+  {s:'pm',d:'Unit 305973',a:'Vilma Mancia',n:'Emp# 3126889 · Start 1030'},
+  {s:'pm',d:'Unit 305988',a:'Kelly Hannan',n:'Emp# 4670180 · Start 1030'},
+  {s:'pm',d:'Unit 305754',a:'Lalo Kafaty',n:'Emp# 185054 · Start 1100'},
+  {s:'pm',d:'Unit 305574',a:'Rob McVickers',n:'Emp# 411734 · Start 1200'},
+  {s:'pm',d:'Unit 305573',a:'Gary Mollo',n:'Emp# 807507 · Start 1200'},
+  {s:'pm',d:'Unit 306176',a:'James Barragan',n:'Emp# 911406 · Start 1200'},
+  {s:'pm',d:'Unit 305752',a:'Drew Howe',n:'Emp# 3739868 · Start 1200'},
+  {s:'pm',d:'Unit 305861',a:'Enrique Martinez',n:'Emp# 5026040 · Start 1200'},
+  {s:'pm',d:'Unit 305439',a:'Otto Kazmer',n:'Emp# 144365 · Start 1200'},
+  {s:'pm',d:'Unit 305575',a:'Brian Chick',n:'Emp# 429890 · Start 1230'},
+  {s:'pm',d:'Unit 306224',a:'Hansel Cedillos — ⚠️ OOS Air Leaks',n:'Emp# 655184 · Start 1945'},
+
+  /* ── PM DRIVER EMPLOYEE #s (searchable by emp#) ── */
+  {s:'pm',d:'Emp# 3126889',a:'Vilma Mancia · Unit 305973',n:'Start 1030'},
+  {s:'pm',d:'Emp# 4670180',a:'Kelly Hannan · Unit 305988',n:'Start 1030'},
+  {s:'pm',d:'Emp# 185054',a:'Lalo Kafaty · Unit 305754',n:'Start 1100'},
+  {s:'pm',d:'Emp# 411734',a:'Rob McVickers · Unit 305574',n:'Start 1200'},
+  {s:'pm',d:'Emp# 807507',a:'Gary Mollo · Unit 305573',n:'Start 1200'},
+  {s:'pm',d:'Emp# 911406',a:'James Barragan · Unit 306176',n:'Start 1200'},
+  {s:'pm',d:'Emp# 3739868',a:'Drew Howe · Unit 305752',n:'Start 1200'},
+  {s:'pm',d:'Emp# 5026040',a:'Enrique Martinez · Unit 305861',n:'Start 1200'},
+  {s:'pm',d:'Emp# 144365',a:'Otto Kazmer · Unit 305439',n:'Start 1200'},
+  {s:'pm',d:'Emp# 429890',a:'Brian Chick · Unit 305575',n:'Start 1230'},
+  {s:'pm',d:'Emp# 655184',a:'Hansel Cedillos · Unit 306224',n:'Start 1945'},
+
+  /* ── PM OOS ── */
+  {s:'pm',d:'OOS 304926',a:'Regen — Spare 305574',n:'Accident'},
+  {s:'pm',d:'OOS 306225',a:'AC — Spare 306178 (crossed out)',n:'PMD'},
+  {s:'pm',d:'OOS 306224',a:'Air Leaks',n:'No spare assigned · Hansel Cedillos unit'},
+
+  /* ── TRACTOR 305224 ── */
+  {s:'pm',d:'Tractor 305224',a:'Dr 15N — with LAX (PM)',n:'PM shift'},
+  {s:'am',d:'Tractor 305224',a:'Dr 14N — with LA Trailer',n:'AM shift'},
+
+  /* ── AM HWT TRACTORS (by tractor#) ── */
+  {s:'am',d:'Tractor 304923',a:'RT 920 · Dr 20N · Trailer 709228(32)',n:'2nd Wave · RAMP · Tractor+Pup'},
+  {s:'am',d:'Tractor 304924',a:'RT 907 · Dr 24N · Trailer 709222(32)',n:'2nd Wave · RAMP · Tractor+Pup'},
+  {s:'am',d:'Tractor 304925',a:'RT 914 · Dr 24S · Trailer 710378(32)',n:'2nd Wave · RAMP · Tractor+Pup'},
+  {s:'am',d:'Tractor 304928',a:'RT 925 · Dr 21N · Trailer 704674(28)',n:'2nd Wave · DROP LOT · Tractor+Pup'},
+  {s:'am',d:'Tractor 305201',a:'RT 912 · Dr 21S · Trailer 709553(32)',n:'3rd Wave · DROP LOT · Tractor+Pup'},
+  {s:'am',d:'Tractor 305414',a:'RT 903 · Dr 25S · Trailer 708299(32)',n:'2nd Wave · RAMP · Tractor+Pup'},
+  {s:'am',d:'Tractor 305572',a:'RT 910 · Dr 21N · Trailer 709552(32)',n:'3rd Wave · RAMP · Tractor+Pup'},
+  {s:'am',d:'Tractor 305753',a:'RT 911 · Dr 21S · Trailer 710373(32)',n:'2nd Wave · RAMP · Tractor+Pup'},
+  {s:'am',d:'Tractor 306226',a:'RT 937 · Dr 25N · Trailer 710341(32)',n:'1st Wave · RAMP · Tractor+Pup'},
+  {s:'am',d:'Tractor 306375',a:'RT 936 · Dr 26 · Trailer 710342(32)',n:'1st Wave · RAMP · Tractor+Pup'},
+
+  /* ── AM HWT STR. TRUCKS (by truck#) ── */
+  {s:'am',d:'Str. Truck 402446',a:'RT 931 · Dr 24N',n:'1st Wave · RAMP'},
+  {s:'am',d:'Str. Truck 402721',a:'RT 934 · Dr 21S',n:'1st Wave · RAMP'},
+  {s:'am',d:'Str. Truck 402858',a:'RT 902 · Dr 20S',n:'2nd Wave · RAMP'},
+  {s:'am',d:'Str. Truck 402859',a:'RT 905 · Dr 25N',n:'2nd Wave · RAMP'},
+  {s:'am',d:'Str. Truck 403020',a:'RT 904 · Dr 24N',n:'3rd Wave · RAMP'},
+  {s:'am',d:'Str. Truck 403022',a:'RT 908 · Dr 25N',n:'3rd Wave · RAMP'},
+  {s:'am',d:'Str. Truck 403060',a:'RT 906 · Dr 24S',n:'3rd Wave · RAMP'},
+  {s:'am',d:'Str. Truck 403286',a:'RT 930 · INSIDE',n:'RAMP'},
+  {s:'am',d:'Str. Truck 403640',a:'RT 933 · INSIDE',n:'RAMP'},
+  {s:'am',d:'Str. Truck 403641',a:'RT 932 · Dr 24S',n:'1st Wave · RAMP'},
+
+  /* ── AM HWT TRAILERS (by trailer#) ── */
+  {s:'am',d:'Trailer 704674',a:'RT 925 · Tractor 304928 · Dr 21N',n:'28ft · 2nd Wave · DROP LOT'},
+  {s:'am',d:'Trailer 708299',a:'RT 903 · Tractor 305414 · Dr 25S',n:'32ft · 2nd Wave · RAMP'},
+  {s:'am',d:'Trailer 709222',a:'RT 907 · Tractor 304924 · Dr 24N',n:'32ft · 2nd Wave · RAMP'},
+  {s:'am',d:'Trailer 709228',a:'RT 920 · Tractor 304923 · Dr 20N',n:'32ft · 2nd Wave · RAMP'},
+  {s:'am',d:'Trailer 709552',a:'RT 910 · Tractor 305572 · Dr 21N',n:'32ft · 3rd Wave · RAMP'},
+  {s:'am',d:'Trailer 709553',a:'RT 912 · Tractor 305201 · Dr 21S',n:'32ft · 3rd Wave · DROP LOT'},
+  {s:'am',d:'Trailer 710341',a:'RT 937 · Tractor 306226 · Dr 25N',n:'32ft · 1st Wave · RAMP'},
+  {s:'am',d:'Trailer 710342',a:'RT 936 · Tractor 306375 · Dr 26',n:'32ft · 1st Wave · RAMP'},
+  {s:'am',d:'Trailer 710373',a:'RT 911 · Tractor 305753 · Dr 21S',n:'32ft · 2nd Wave · RAMP'},
+  {s:'am',d:'Trailer 710378',a:'RT 914 · Tractor 304925 · Dr 24S',n:'32ft · 2nd Wave · RAMP'},
+];
+
+const SL={am:'☀️ AM SHIFT',pm:'🌙 PM SHIFT',tr:'🔄 TRANSITION',all:'📦 ALL SHIFTS'};
+function doSearch(q){
+  const inp=document.getElementById('searchInput');
+  inp.value=q;
+  document.getElementById('searchClear').style.display=q?'block':'none';
+  const q2=q.toLowerCase().replace(/^rte?\s*/,'').replace(/route\s*/,'');
+  const res=document.getElementById('searchResults');
+  if(!q.trim()){res.innerHTML='<div class="search-hint">👇 Type anything to find your spot<br><span style="color:#bbb;font-size:11px;">Asset number, dock door, route name, trailer ID, or keyword</span></div>';return;}
+  const hits=DB.filter(r=>{const h=(r.d+' '+r.a+' '+r.n).toLowerCase();return h.includes(q2)||h.includes(q.toLowerCase());});
+  if(!hits.length){res.innerHTML='<div class="no-results">🔎 No results for "'+q+'"<br><span style="font-size:12px;color:#bbb;">Try a different asset #, door, or route name</span></div>';return;}
+  res.innerHTML=hits.map(r=>`<div class="result-card"><div class="result-header ${r.s}">${SL[r.s]}</div><div class="result-body"><div class="result-door">${r.d}</div><div class="result-assign">${r.a}</div>${r.n?'<div class="result-note">'+r.n+'</div>':''}</div></div>`).join('');
+}
+function clearSearch(){
+  document.getElementById('searchInput').value='';
+  document.getElementById('searchClear').style.display='none';
+  document.getElementById('searchResults').innerHTML='<div class="search-hint">👇 Type anything to find your spot<br><span style="color:#bbb;font-size:11px;">Asset number, dock door, route name, trailer ID, or keyword</span></div>';
+}
+</script>
+</body>
+</html>
