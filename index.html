@@ -214,6 +214,7 @@
   <div class="tab" id="tab-pm" onclick="showTab('pm')">🌙 PM<br>Mon–Fri</div>
   <div class="tab" id="tab-tr" onclick="showTab('tr')">🔄 TRANS-<br>ITION</div>
   <div class="tab" id="tab-fi" onclick="showTab('fi')">🔍 FIND<br>MY SPOT</div>
+  <div class="tab" id="tab-up" onclick="showTab('up')">📲 SEND<br>UPDATE</div>
 </div>
 
 <!-- ══════════════════════════ AM SHIFT ══════════════════════════ -->
@@ -689,6 +690,50 @@
   </div>
 </div><!-- end panel-fi -->
 
+<!-- ══════════════════════════ SEND UPDATE ══════════════════════════ -->
+<div class="panel" id="panel-up">
+  <div class="shift-header" style="background:rgba(52,211,153,0.1);border-left:4px solid var(--teal);margin-top:10px;">
+    <div class="shift-title">📲 Send Yard Update</div>
+    <div class="shift-sub">Quick report → opens your text app ready to send</div>
+  </div>
+
+  <div class="door-list" style="border-radius:8px;margin-bottom:12px;">
+    <div class="door-row"><div class="door-label">Issue Type</div>
+      <div class="door-content">
+        <select id="upIssue" style="width:100%;background:var(--bg4);color:var(--text);border:1px solid var(--border2);border-radius:6px;padding:6px 8px;font-size:13px;outline:none;">
+          <option value="">— Select —</option>
+          <option>🔴 OOS — Unit down</option>
+          <option>⚠️ Overflow — No room at door</option>
+          <option>🚛 Wrong door assignment</option>
+          <option>🔑 Key issue</option>
+          <option>⛽ Fuel needed</option>
+          <option>🚧 Yard hazard</option>
+          <option>📦 Trailer not on plan</option>
+          <option>✅ Ready / Staged</option>
+          <option>📝 Other</option>
+        </select>
+      </div>
+    </div>
+    <div class="door-row" style="min-height:90px;"><div class="door-label">Notes</div>
+      <div class="door-content">
+        <textarea id="upNotes" placeholder="Door #, asset #, details..." style="width:100%;background:var(--bg4);color:var(--text);border:1px solid var(--border2);border-radius:6px;padding:6px 8px;font-size:13px;outline:none;resize:none;height:70px;font-family:inherit;"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <button onclick="sendUpdate()" style="width:100%;padding:14px;background:var(--teal);color:#0d0f12;font-size:15px;font-weight:700;border:none;border-radius:10px;cursor:pointer;letter-spacing:0.5px;">📲 Generate &amp; Send Text</button>
+
+  <div id="upPreview" style="display:none;margin-top:12px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:12px;">
+    <div style="font-size:10px;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">Message Preview</div>
+    <div id="upPreviewText" style="font-size:13px;color:var(--text);line-height:1.5;white-space:pre-wrap;"></div>
+    <div style="font-size:10px;color:var(--text3);margin-top:8px;">↑ Tap the button above to open your text app with this message ready</div>
+  </div>
+
+  <div class="alert" style="margin-top:12px;">
+    <strong>How it works:</strong> Fill in the issue type and any notes, then tap the button. Your texting app will open with the message pre-written — just hit Send.
+  </div>
+</div><!-- end panel-up -->
+
 <div class="footer">PHX Cargo Yard &nbsp;·&nbsp; Rev. 12/31/24 · Upd. 4/10/26 &nbsp;·&nbsp; salmon-hertha-31.tiiny.site</div>
 
 <script>
@@ -700,12 +745,24 @@ function updateClock() {
 }
 updateClock(); setInterval(updateClock, 10000);
 
-const tabCls = {am:'active-am',pm:'active-pm',tr:'active-tr',fi:'active-fi'};
+const tabCls = {am:'active-am',pm:'active-pm',tr:'active-tr',fi:'active-fi',up:'active-fi'};
 function showTab(t) {
-  ['am','pm','tr','fi'].forEach(id => {
+  ['am','pm','tr','fi','up'].forEach(id => {
     document.getElementById('tab-'+id).className='tab'+(id===t?' '+tabCls[id]:'');
     document.getElementById('panel-'+id).classList.toggle('active',id===t);
   });
+}
+
+function sendUpdate() {
+  const issue = document.getElementById('upIssue').value;
+  const notes = document.getElementById('upNotes').value.trim();
+  if (!issue) { alert('Please select an issue type.'); return; }
+  const now = new Date();
+  const time = now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+  const msg = `PHX YARD UPDATE — ${time}\nIssue: ${issue}\n${notes ? 'Notes: '+notes : ''}`.trim();
+  document.getElementById('upPreviewText').textContent = msg;
+  document.getElementById('upPreview').style.display = 'block';
+  window.location.href = `sms:4804449649&body=${encodeURIComponent(msg)}`;
 }
 function showTr(t) {
   document.getElementById('tr-pm').style.display=t==='pm'?'':'none';
