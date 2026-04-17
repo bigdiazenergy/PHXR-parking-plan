@@ -199,6 +199,20 @@
   .search-hint { text-align: center; color: var(--text3); font-size: 13px; padding: 20px 10px; }
 
   .footer { text-align: center; padding: 16px 10px; font-size: 11px; color: var(--text3); border-top: 1px solid var(--border); margin-top: 10px; }
+
+  /* ── BACK TO TOP ── */
+  .back-top { display: block; width: calc(100% - 20px); margin: 14px 10px 6px; padding: 11px; background: var(--bg4); color: var(--text2); border: 1px solid var(--border2); border-radius: 10px; font-size: 12px; font-weight: 600; text-align: center; cursor: pointer; letter-spacing: 0.4px; }
+  .back-top:active { background: var(--blue-dim); color: var(--blue); }
+
+  /* ── DROP LOT ── */
+  .droplot-card { background: var(--bg3); border-radius: 8px; border: 1px solid var(--border2); overflow: hidden; margin-bottom: 10px; margin-top: 12px; }
+  .droplot-title { background: rgba(251,191,36,0.15); border-bottom: 1px solid rgba(251,191,36,0.25); padding: 8px 12px; font-size: 12px; font-weight: 700; color: var(--yellow); letter-spacing: 0.4px; }
+  .droplot-sub { font-size: 10px; color: var(--text3); font-weight: 400; margin-top: 1px; }
+  .droplot-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 12px; border-bottom: 1px solid var(--border); font-size: 12px; }
+  .droplot-row:last-child { border-bottom: none; }
+  .droplot-label { color: var(--text2); font-weight: 600; }
+  .droplot-val { font-family: monospace; color: var(--text); }
+  .droplot-note { padding: 8px 12px; font-size: 11px; color: var(--yellow); background: rgba(251,191,36,0.07); border-top: 1px solid rgba(251,191,36,0.15); font-style: italic; }
 </style>
 </head>
 <body>
@@ -206,7 +220,7 @@
 <div class="header">
   <div class="header-title">FedEx Express</div>
   <div class="header-main">PHX Cargo Yard</div>
-  <div class="header-sub" id="clock">--:-- -- &nbsp;·&nbsp; Rev. 12/31/24 · Upd. 4/10/26</div>
+  <div class="header-sub" id="clock">--:-- -- &nbsp;·&nbsp; Rev. 12/31/24 · Upd. 4/17/26</div>
 </div>
 
 <div class="tabs">
@@ -300,7 +314,7 @@
   <div class="alert alert-info" style="border-radius:0;margin-bottom:0;font-size:11px;"><strong>🚛 HWT Equipment:</strong> Str. trucks (no trailer) · Tractor + pup sets (truck# · trailer#) · Doors actively loaded/offloaded per wave. Operational need may use additional doors.</div>
   <div class="door-list">
     <div class="door-row"><div class="door-label">Dr 19S</div><div class="door-content"><div><span class="badge badge-gray">Str. Truck</span> <span class="badge badge-gray">Str. Truck</span></div><div class="door-note">HWT Overflow Area C</div></div></div>
-    <div class="door-row"><div class="door-label">Dr 20N</div><div class="door-content"><div><span class="badge badge-blue">RT 920</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">304923 · 709228(32)</span></div><div class="wave-tag">2nd Wave · RAMP</div></div></div>
+    <div class="door-row"><div class="door-label">Dr 20N</div><div class="door-content"><div><span class="badge badge-blue">RT 920</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">304923 · 709228(32)</span></div><div class="wave-tag">2nd Wave · RAMP</div><div class="door-info">📬 Leave empty for PM postal when you get back from routes please</div></div></div>
     <div class="door-row"><div class="door-label">Dr 20S</div><div class="door-content"><div><span class="badge badge-blue">RT 902</span> <span class="badge badge-gray">Str. Truck</span> <span class="asset-num">402858</span></div><div class="wave-tag">2nd Wave · RAMP</div><div class="door-warn">⚠️ HWT Overflow Area A — contract trailer staged → HWT in front. Full → Area B.</div></div></div>
     <div class="door-row"><div class="door-label">Dr 21N</div><div class="door-content"><div><span class="badge badge-blue">RT 910</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">305572 · 709552(32)</span> <span class="wave-tag">3rd · RAMP</span></div><div><span class="badge badge-blue">RT 925</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">304928 · 704674(28)</span> <span class="wave-tag">2nd · DROP LOT</span></div><div class="door-warn">⚠️ HWT Overflow Area A — contract trailer staged → HWT in front. Full → Area B.</div></div></div>
     <div class="door-row"><div class="door-label">Dr 21S</div><div class="door-content"><div><span class="badge badge-blue">RT 911</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">305753 · 710373(32)</span> <span class="wave-tag">2nd · RAMP</span></div><div><span class="badge badge-blue">RT 912</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">305201 · 709553(32)</span> <span class="wave-tag">3rd · DROP LOT</span></div><div><span class="badge badge-blue">RT 934</span> <span class="badge badge-gray">Str. Truck</span> <span class="asset-num">402721</span> <span class="wave-tag">1st · RAMP</span></div><div class="door-warn">⚠️ HWT Overflow Area A — contract trailer staged → HWT in front. Full → Area B.</div></div></div>
@@ -393,6 +407,16 @@
       </div>
     </div>
   </div>
+  <div class="droplot-card">
+    <div class="droplot-title">🅿️ DROP LOT — Offsite Staging
+      <div class="droplot-sub">Assets temporarily stored offsite — not in immediate yard use</div>
+    </div>
+    <div class="droplot-row"><span class="droplot-label">HWT DROP LOT units</span><span class="droplot-val">RT 925 · RT 912</span></div>
+    <div class="droplot-row"><span class="droplot-label">RT 925</span><span class="droplot-val">304928 · 704674(28) · 2nd Wave</span></div>
+    <div class="droplot-row"><span class="droplot-label">RT 912</span><span class="droplot-val">305201 · 709553(32) · 3rd Wave</span></div>
+    <div class="droplot-note">⚠️ DROP LOT units return to Dr 21N / 21S for loading — confirm before dispatching</div>
+  </div>
+  <button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆ Back to Top</button>
 </div><!-- end panel-am -->
 
 <!-- ══════════════════════════ PM SHIFT ══════════════════════════ -->
@@ -445,7 +469,7 @@
     <div class="door-row"><div class="door-label">Dr 14N</div><div class="door-content"><span class="badge badge-blue">LA Trailer</span></div></div>
     <div class="door-row empty-row"><div class="door-label">Dr 14S</div><div class="door-content"><span class="badge badge-gray">Empty / Overflow</span></div></div>
     <div class="door-row"><div class="door-label">Dr 15N</div><div class="door-content"><div><span class="badge badge-blue">LAX (PM)</span> <span class="badge badge-orange">Tractor 305224</span></div></div></div>
-    <div class="door-row empty-row"><div class="door-label">Dr 15S</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
+    <div class="door-row"><div class="door-label">Dr 15S</div><div class="door-content"><div><span class="badge badge-blue">YUMA</span> <span class="badge badge-orange">Roller</span> <span class="asset-num">304439</span></div><div class="door-note">Otto Kazmer</div></div></div>
     <div class="door-row empty-row"><div class="door-label">Dr 16N</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
     <div class="door-row empty-row"><div class="door-label">Dr 16S</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
     <div class="door-row empty-row"><div class="door-label">Dr 17N</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
@@ -458,7 +482,7 @@
   <div class="section-head">📍 Lower Dock — Dr 19S–26S</div>
   <div class="door-list">
     <div class="door-row"><div class="door-label">Dr 19S</div><div class="door-content"><div><span class="badge badge-gray">Str. Truck</span> <span class="badge badge-gray">Str. Truck</span></div><div class="door-note">HWT Overflow Area C</div></div></div>
-    <div class="door-row"><div class="door-label">Dr 20N</div><div class="door-content"><span class="badge badge-purple">USPS</span><div class="door-note">Reserved for USPS PM ops</div></div></div>
+    <div class="door-row empty-row"><div class="door-label">Dr 20N</div><div class="door-content"><span class="badge badge-gray">Empty</span><div class="door-note">POSTAL — reserved for USPS PM ops as needed</div></div></div>
     <div class="door-row"><div class="door-label">Dr 20S</div><div class="door-content"><div><span class="badge badge-blue">RT 902</span> <span class="asset-num">402858</span></div><div class="wave-tag">2nd Wave · RAMP</div><div class="door-warn">⚠️ HWT Overflow Area A — if contract trailer staged, HWT parks in front. Full → Area B.</div></div></div>
     <div class="door-row"><div class="door-label">Dr 21N</div><div class="door-content"><div><span class="badge badge-blue">RT 910</span> <span class="asset-num">305572 · 709552</span> <span class="wave-tag">3rd · RAMP</span></div><div><span class="badge badge-blue">RT 925</span> <span class="asset-num">304928 · 704674</span> <span class="wave-tag">2nd · DROP LOT</span></div><div class="door-warn">⚠️ HWT Overflow Area A — if contract trailer staged, HWT parks in front. Full → Area B.</div></div></div>
     <div class="door-row"><div class="door-label">Dr 21S</div><div class="door-content"><div><span class="badge badge-blue">RT 911</span> <span class="asset-num">305753 · 710373</span> <span class="wave-tag">2nd · RAMP</span></div><div><span class="badge badge-blue">RT 912</span> <span class="asset-num">305201 · 709553</span> <span class="wave-tag">3rd · DROP LOT</span></div><div><span class="badge badge-blue">RT 934</span> <span class="asset-num">402721</span> <span class="wave-tag">1st · RAMP</span></div><div class="door-warn">⚠️ HWT Overflow Area A — if contract trailer staged, HWT parks in front. Full → Area B.</div></div></div>
@@ -473,6 +497,15 @@
     <div class="door-row"><div class="door-label">INSIDE</div><div class="door-content"><div><span class="badge badge-blue">RT 930</span> <span class="asset-num">403286</span> <span class="wave-tag">RAMP</span></div><div><span class="badge badge-blue">RT 933</span> <span class="asset-num">403640</span> <span class="wave-tag">RAMP</span></div></div></div>
   </div>
 
+  <div class="section-head">🅿️ Drop Lot — Current Inventory</div>
+  <div class="door-list" style="border-radius:0 0 6px 6px;margin-bottom:10px;">
+    <div class="door-row"><div class="door-label">Covenant</div><div class="door-content"><span class="asset-num">4 total</span></div></div>
+    <div class="door-row"><div class="door-label">Totals</div><div class="door-content"><span class="asset-num">2 total</span></div></div>
+    <div class="door-row"><div class="door-label">Roller</div><div class="door-content"><span class="asset-num">1 total roller</span></div></div>
+    <div class="door-row"><div class="door-label">PHX Cargo</div><div class="door-content"><span class="asset-num">2 grounds</span></div></div>
+    <div class="door-row"><div class="door-label">Heartland</div><div class="door-content"><span class="asset-num">1 dry bed</span></div></div>
+  </div>
+
   <div class="tractor-card">
     <div class="tractor-card-title">🅿️ East Fence — Tractor &amp; HWT Parking</div>
     <div class="tractor-rule">Twin axle — primary spots</div>
@@ -482,8 +515,6 @@
     <div class="tractor-rule">⚠️ Max 2 rows HWT vehicles by fence only</div>
     <div class="tractor-rule">🚛 Yard Mule: 2 spots near Light Post, south east fence</div>
   </div>
-
-  <div class="section-head">📦 HWT Truck List 2.0 — Rev. 9/20/2025</div>
   <table class="hwt-table">
     <tr><th>RT#</th><th>Truck#</th><th>Trailer#</th><th>Door</th><th>Wave</th></tr>
     <tr><td>902</td><td class="mono">402858</td><td class="mono">—</td><td>Dr 20S</td><td>2nd · RAMP</td></tr>
@@ -539,6 +570,19 @@
     <div class="door-row"><div class="door-label">Row 4</div><div class="door-content"><span class="asset-num">305201 &nbsp;·&nbsp; 305200</span></div></div>
   </div>
 
+  <div class="droplot-card">
+    <div class="droplot-title">🅿️ DROP LOT — Offsite Staging
+      <div class="droplot-sub">Contract &amp; overflow trailers stored offsite — not in immediate yard use</div>
+    </div>
+    <div class="droplot-row"><span class="droplot-label">Covenant</span><span class="droplot-val">4 trailers</span></div>
+    <div class="droplot-row"><span class="droplot-label">Totals</span><span class="droplot-val">2 trailers</span></div>
+    <div class="droplot-row"><span class="droplot-label">Roller</span><span class="droplot-val">1 trailer</span></div>
+    <div class="droplot-row"><span class="droplot-label">PHX Cargo</span><span class="droplot-val">2 ground trailers</span></div>
+    <div class="droplot-row"><span class="droplot-label">Heartland</span><span class="droplot-val">1 dry bed</span></div>
+    <div class="droplot-note">📋 Confirm availability before pulling to dock</div>
+  </div>
+  <button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆ Back to Top</button>
+
 </div><!-- end panel-pm -->
 
 <!-- ══════════════════════════ TRANSITION ══════════════════════════ -->
@@ -555,6 +599,7 @@
   <!-- PM→AM -->
   <div id="tr-pm">
     <div class="alert alert-info"><strong>ℹ️ After PM — Staging for AM</strong><br>Docks 7–13 reserved for inbound/outbound with freight first. Stage Roller beds in any empty dock. <strong>Max 15 · Min 11 trailers.</strong></div>
+    <div class="alert" style="background:rgba(251,191,36,0.12);border-color:rgba(251,191,36,0.35);margin-top:-6px;"><strong style="color:var(--yellow);">⚠️ MINIMUM TRAILER REQUIREMENT:</strong> <span style="color:var(--text2);">AM needs a minimum of <strong style="color:var(--yellow);">11 trailers</strong> staged and ready for setup. Do not leave short.</span></div>
     <div class="section-head">📍 Dr 13N–19N — 53' Roller Staging</div>
     <div class="door-list">
       <div class="door-row"><div class="door-label">Dr 13N</div><div class="door-content"><span class="badge badge-blue">Trailer 53' Roller</span></div></div>
@@ -574,7 +619,7 @@
     <div class="section-head">📍 Lower Dock — Dr 19S–26S &nbsp;<span style="font-weight:400;font-size:11px;opacity:0.8;">⏱ HWT staging ~Midnight–9am</span></div>
     <div class="door-list">
       <div class="door-row"><div class="door-label">Dr 19S</div><div class="door-content"><div><span class="badge badge-gray">Str. Truck</span> <span class="badge badge-gray">Str. Truck</span></div><div class="door-note">HWT Overflow Area C</div></div></div>
-      <div class="door-row"><div class="door-label">Dr 20N</div><div class="door-content"><div><span class="badge badge-blue">RT 920</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">304923 · 709228(32)</span></div><div class="wave-tag">2nd · RAMP</div></div></div>
+      <div class="door-row"><div class="door-label">Dr 20N</div><div class="door-content"><div><span class="badge badge-blue">RT 920</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">304923 · 709228(32)</span></div><div class="wave-tag">2nd · RAMP</div><div class="door-note">→ POSTAL after HWT wraps</div></div></div>
       <div class="door-row"><div class="door-label">Dr 20S</div><div class="door-content"><div><span class="badge badge-blue">RT 902</span> <span class="badge badge-gray">Str. Truck</span> <span class="asset-num">402858</span></div><div class="wave-tag">2nd · RAMP</div><div class="door-warn">⚠️ HWT Overflow Area A — contract trailer staged → HWT in front. Full → Area B.</div></div></div>
       <div class="door-row"><div class="door-label">Dr 21N</div><div class="door-content"><div><span class="badge badge-blue">RT 910</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">305572 · 709552(32)</span> <span class="wave-tag">3rd · RAMP</span></div><div><span class="badge badge-blue">RT 925</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">304928 · 704674(28)</span> <span class="wave-tag">2nd · DROP LOT</span></div><div class="door-warn">⚠️ HWT Overflow Area A — contract trailer staged → HWT in front. Full → Area B.</div></div></div>
       <div class="door-row"><div class="door-label">Dr 21S</div><div class="door-content"><div><span class="badge badge-blue">RT 911</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">305753 · 710373(32)</span> <span class="wave-tag">2nd · RAMP</span></div><div><span class="badge badge-blue">RT 912</span> <span class="badge badge-orange">Tractor+Pup</span> <span class="asset-num">305201 · 709553(32)</span> <span class="wave-tag">3rd · DROP LOT</span></div><div><span class="badge badge-blue">RT 934</span> <span class="badge badge-gray">Str. Truck</span> <span class="asset-num">402721</span> <span class="wave-tag">1st · RAMP</span></div><div class="door-warn">⚠️ HWT Overflow Area A — contract trailer staged → HWT in front. Full → Area B.</div></div></div>
@@ -596,11 +641,27 @@
       <div class="door-row"><div class="door-label">Routes</div><div class="door-content"><span class="asset-num">403060</span> <span class="badge badge-blue">LHUA</span> <span class="asset-num">402446</span> <span class="badge badge-blue">FLGA</span> <span class="asset-num">403020</span> <span class="badge badge-blue">SOWA</span></div></div>
       <div class="door-row"><div class="door-label">Vans</div><div class="door-content"><span class="badge badge-gray">Training van</span> <span class="badge badge-gray">Transport van</span></div></div>
     </div>
+    <div class="droplot-card">
+      <div class="droplot-title">🅿️ DROP LOT — Offsite Staging
+        <div class="droplot-sub">Assets staging offsite before AM ops begin</div>
+      </div>
+      <div class="droplot-row"><span class="droplot-label">HWT DROP LOT units</span><span class="droplot-val">RT 925 · RT 912</span></div>
+      <div class="droplot-row"><span class="droplot-label">RT 925</span><span class="droplot-val">304928 · 704674(28) · 2nd Wave</span></div>
+      <div class="droplot-row"><span class="droplot-label">RT 912</span><span class="droplot-val">305201 · 709553(32) · 3rd Wave</span></div>
+      <div class="droplot-note">⚠️ These return to Dr 21N / 21S for loading — confirm before dispatching</div>
+    </div>
+    <button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆ Back to Top</button>
   </div><!-- end tr-pm -->
 
   <!-- AM→PM -->
   <div id="tr-am" style="display:none;">
     <div class="alert alert-info"><strong>ℹ️ After AM — Staging for PM</strong><br>Stage pup trailers at Junk Decking and Dr 11N. Dr 9S gets TUS dry bed. Docks 7–13 priority for freight.</div>
+
+    <div class="section-head">📍 Front — Dr 5–6</div>
+    <div class="door-list">
+      <div class="door-row highlight"><div class="door-label">Dr 5–6</div><div class="door-content"><span class="badge badge-yellow">Misc Contract Trailer Stage</span><div class="door-note">Stage miscellaneous contract trailers here during AM→PM transition</div></div></div>
+    </div>
+
     <div class="section-head">📍 Main Dock — Dr 7N–12S</div>
     <div class="door-list">
       <div class="door-row"><div class="door-label">Dr 7N</div><div class="door-content"><div><span class="badge badge-gray">Str. Truck</span> <span class="badge badge-gray">Str. Truck</span></div><div class="door-warn">Storage only — max 2 &nbsp;·&nbsp; HWT Overflow Area C</div></div></div>
@@ -612,7 +673,7 @@
       <div class="door-row highlight"><div class="door-label">Junk Decking</div><div class="door-content"><span class="badge badge-green">Stage 1 — 2 liftgate pups</span><div class="asset-num">704675 or 704908</div></div></div>
       <div class="door-row highlight"><div class="door-label">Dr 11N</div><div class="door-content"><span class="badge badge-green">Stage 2 — 3 rollerbed pups</span><div class="asset-num">702593 or 702625 or 702623</div></div></div>
       <div class="door-row empty-row"><div class="door-label">Dr 11S</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
-      <div class="door-row"><div class="door-label">Dr 12N</div><div class="door-content"><span class="badge badge-green">Ground</span></div></div>
+      <div class="door-row empty-row"><div class="door-label">Dr 12N</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
       <div class="door-row empty-row"><div class="door-label">Dr 12S</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
     </div>
     <div class="section-head">📍 Mid Dock — Dr 13N–19N</div>
@@ -626,14 +687,14 @@
       <div class="door-row empty-row"><div class="door-label">Dr 16S</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
       <div class="door-row empty-row"><div class="door-label">Dr 17N</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
       <div class="door-row empty-row"><div class="door-label">Dr 17S</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
-      <div class="door-row"><div class="door-label">Dr 18N</div><div class="door-content"><span class="asset-num">707154</span></div></div>
-      <div class="door-row"><div class="door-label">Dr 18S</div><div class="door-content"><span class="asset-num">707153</span></div></div>
-      <div class="door-row"><div class="door-label">Dr 19N</div><div class="door-content"><span class="asset-num">711000</span></div></div>
+      <div class="door-row highlight"><div class="door-label">Dr 18N</div><div class="door-content"><span class="badge badge-teal">Newer Softsides</span></div></div>
+      <div class="door-row highlight"><div class="door-label">Dr 18S</div><div class="door-content"><span class="badge badge-teal">Newer Softsides</span></div></div>
+      <div class="door-row highlight"><div class="door-label">Dr 19N</div><div class="door-content"><span class="badge badge-teal">Newer Softsides</span></div></div>
     </div>
     <div class="section-head">📍 Lower Dock — Dr 19S–26S</div>
     <div class="door-list">
       <div class="door-row"><div class="door-label">Dr 19S</div><div class="door-content"><div><span class="badge badge-gray">Str. Truck</span> <span class="badge badge-gray">Str. Truck</span></div><div class="door-note">HWT Overflow Area C</div></div></div>
-      <div class="door-row"><div class="door-label">Dr 20N</div><div class="door-content"><span class="badge badge-purple">POSTAL</span></div></div>
+      <div class="door-row empty-row"><div class="door-label">Dr 20N</div><div class="door-content"><span class="badge badge-gray">Empty</span><div class="door-info">📬 Leave empty for Postal please</div></div></div>
       <div class="door-row empty-row"><div class="door-label">Dr 20S</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
       <div class="door-row"><div class="door-label">Dr 21N</div><div class="door-content"><span class="asset-num">704374 · 304012</span> <span class="badge badge-blue">← DVTA</span><div class="door-warn">⚠️ HWT Overflow Area A</div></div></div>
       <div class="door-row"><div class="door-label">Dr 21S</div><div class="door-content"><span class="asset-num">709553 · 305201</span> <span class="badge badge-blue">← PRCA</span><div class="door-warn">⚠️ HWT Overflow Area A</div></div></div>
@@ -644,6 +705,14 @@
       <div class="door-row empty-row"><div class="door-label">Dr 25N–26N</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
       <div class="door-row"><div class="door-label">Dr 26S</div><div class="door-content"><div><span class="badge badge-gray">Str. Truck</span> <span class="badge badge-gray">Str. Truck</span></div><div class="door-note">HWT Overflow Area C</div></div></div>
     </div>
+    <div class="droplot-card">
+      <div class="droplot-title">🅿️ DROP LOT — Offsite Staging
+        <div class="droplot-sub">Assets staging offsite during AM→PM transition</div>
+      </div>
+      <div class="droplot-row"><span class="droplot-label">Contract trailers</span><span class="droplot-val">Covenant · Totals · Roller · PHX Cargo · Heartland</span></div>
+      <div class="droplot-note">📋 Confirm which trailers are needed before pulling to dock for PM setup</div>
+    </div>
+    <button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆ Back to Top</button>
   </div><!-- end tr-am -->
 </div><!-- end panel-tr -->
 
@@ -688,6 +757,7 @@
       <div class="search-hint">👇 Search by anything<br><span style="font-size:11px;">Driver name · Emp# · Unit# · Tractor# · Trailer# · Door · Route</span></div>
     </div>
   </div>
+  <button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆ Back to Top</button>
 </div><!-- end panel-fi -->
 
 <!-- ══════════════════════════ SEND UPDATE ══════════════════════════ -->
@@ -732,16 +802,17 @@
   <div class="alert" style="margin-top:12px;">
     <strong>How it works:</strong> Fill in the issue type and any notes, then tap the button. Your texting app will open with the message pre-written — just hit Send.
   </div>
+  <button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆ Back to Top</button>
 </div><!-- end panel-up -->
 
-<div class="footer">PHX Cargo Yard &nbsp;·&nbsp; Rev. 12/31/24 · Upd. 4/10/26 &nbsp;·&nbsp; salmon-hertha-31.tiiny.site</div>
+<div class="footer">PHX Cargo Yard &nbsp;·&nbsp; Rev. 12/31/24 · Upd. 4/17/26 &nbsp;·&nbsp; bigdiazenergy.github.io/PHXR-parking-plan</div>
 
 <script>
 function updateClock() {
   const now = new Date();
   let h = now.getHours(), m = now.getMinutes(), ap = h >= 12 ? 'PM' : 'AM';
   h = h % 12 || 12;
-  document.getElementById('clock').textContent = h+':'+(m+'').padStart(2,'0')+' '+ap+'  ·  Rev. 12/31/24 · Upd. 4/10/26';
+  document.getElementById('clock').textContent = h+':'+(m+'').padStart(2,'0')+' '+ap+'  ·  Rev. 12/31/24 · Upd. 4/17/26';
 }
 updateClock(); setInterval(updateClock, 10000);
 
@@ -854,7 +925,9 @@ const DB=[
   {s:'pm',d:'Dr 18S',a:'ZSYA Softside — Gary Mollo',n:'Unit 305573 · Emp# 807507'},
   {s:'pm',d:'Dr 19N',a:'LUFA Softside — Rob McVickers',n:'Unit 305574 · Emp# 411734'},
   {s:'pm',d:'Dr 19S',a:'Str. Truck x2',n:'HWT Overflow Area C'},
-  {s:'pm',d:'Dr 20N',a:'USPS — Reserved for USPS PM ops',n:''},
+  {s:'pm',d:'Dr 20N',a:'Empty — POSTAL reserved for USPS PM ops as needed',n:''},
+  {s:'pm',d:'Dr 15S',a:'YUMA Roller 304439 — Otto Kazmer',n:'Unit 305439 · Emp# 144365'},
+  {s:'pm',d:'Drop Lot',a:'4 Covenant · 2 Totals · 1 Roller · 2 PHX Cargo Grounds · 1 Heartland Dry Bed',n:'Current inventory'},
   {s:'pm',d:'Dr 20S',a:'RT 902 · Truck 402858',n:'2nd Wave · RAMP · ⚠️ HWT Overflow Area A'},
   {s:'pm',d:'Dr 21N',a:'RT 910 · 305572 · 709552 (3rd RAMP) | RT 925 · 304928 · 704674 (2nd DROP LOT)',n:'⚠️ HWT Overflow Area A'},
   {s:'pm',d:'Dr 21S',a:'RT 911 · 305753 · 710373 (2nd RAMP) | RT 912 · 305201 · 709553 (3rd DROP LOT) | RT 934 · 402721 (1st RAMP)',n:'⚠️ HWT Overflow Area A'},
