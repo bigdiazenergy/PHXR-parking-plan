@@ -220,7 +220,7 @@
 <div class="header">
   <div class="header-title">FedEx Express</div>
   <div class="header-main">PHX Cargo Yard</div>
-  <div class="header-sub" id="clock">--:-- -- &nbsp;·&nbsp; Rev. 12/31/24 · Upd. 6/10/26</div>
+  <div class="header-sub" id="clock">--:-- -- &nbsp;·&nbsp; Rev. 12/31/24 · Upd. --/--/--</div>
 </div>
 
 <div class="tabs">
@@ -879,14 +879,27 @@
   <button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆ Back to Top</button>
 </div><!-- end panel-up -->
 
-<div class="footer">PHX Cargo Yard &nbsp;·&nbsp; Rev. 12/31/24 · Upd. 4/17/26 &nbsp;·&nbsp; bigdiazenergy.github.io/PHXR-parking-plan</div>
+<div class="footer" id="footer-date">PHX Cargo Yard &nbsp;·&nbsp; Rev. 12/31/24 · Upd. --/--/-- &nbsp;·&nbsp; bigdiazenergy.github.io/PHXR-parking-plan</div>
 
 <script>
+// Auto-fetch last commit date so header always shows the real last-updated time
+let lastUpdated = '--/--/--';
+fetch('https://api.github.com/repos/bigdiazenergy/PHXR-parking-plan/commits/main')
+  .then(r => r.json())
+  .then(data => {
+    const d = new Date(data.commit.committer.date);
+    lastUpdated = (d.getMonth()+1) + '/' + d.getDate() + '/' + String(d.getFullYear()).slice(2);
+    updateClock();
+    const f = document.getElementById('footer-date');
+    if (f) f.textContent = 'PHX Cargo Yard  ·  Rev. 12/31/24 · Upd. ' + lastUpdated + '  ·  bigdiazenergy.github.io/PHXR-parking-plan';
+  })
+  .catch(() => { lastUpdated = '?'; });
+
 function updateClock() {
   const now = new Date();
   let h = now.getHours(), m = now.getMinutes(), ap = h >= 12 ? 'PM' : 'AM';
   h = h % 12 || 12;
-  document.getElementById('clock').textContent = h+':'+(m+'').padStart(2,'0')+' '+ap+'  ·  Rev. 12/31/24 · Upd. 4/17/26';
+  document.getElementById('clock').textContent = h+':'+(m+'').padStart(2,'0')+' '+ap+'  ·  Rev. 12/31/24 · Upd. '+lastUpdated;
 }
 updateClock(); setInterval(updateClock, 10000);
 
