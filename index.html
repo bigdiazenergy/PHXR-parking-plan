@@ -213,6 +213,43 @@
   .droplot-label { color: var(--text2); font-weight: 600; }
   .droplot-val { font-family: monospace; color: var(--text); }
   .droplot-note { padding: 8px 12px; font-size: 11px; color: var(--yellow); background: rgba(251,191,36,0.07); border-top: 1px solid rgba(251,191,36,0.15); font-style: italic; }
+
+  /* ── TRAILER AUDIT ── */
+  .ta-section { background: var(--bg2); border-bottom: 1px solid var(--border); }
+  .ta-hdr { display: flex; align-items: center; padding: 9px 14px; cursor: pointer; background: rgba(52,211,153,0.07); border-bottom: 1px solid rgba(52,211,153,0.18); user-select: none; gap: 8px; }
+  .ta-hdr-title { font-size: 12px; font-weight: 700; color: var(--teal); letter-spacing: 0.8px; flex: 1; }
+  .ta-hdr-meta { font-size: 10px; color: var(--text3); }
+  .ta-hdr-arrow { font-size: 10px; color: var(--teal); }
+  .ta-stabs { display: flex; background: var(--bg2); border-bottom: 1px solid var(--border); }
+  .ta-stab { flex: 1; padding: 8px 4px; text-align: center; font-size: 11px; font-weight: 600; color: var(--text3); cursor: pointer; border-bottom: 3px solid transparent; line-height: 1.3; background: none; border-top: none; border-left: none; border-right: none; }
+  .ta-stab.active { color: var(--teal); border-bottom-color: var(--teal); background: var(--teal-dim); }
+  .ta-pan { display: none; padding: 10px; }
+  .ta-pan.active { display: block; }
+  .ta-tbl { width: 100%; border-collapse: collapse; font-size: 12px; background: var(--bg3); border-radius: 6px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 8px; }
+  .ta-tbl th { background: rgba(52,211,153,0.15); color: var(--teal); padding: 6px 8px; text-align: left; font-size: 10px; letter-spacing: 0.4px; text-transform: uppercase; border-bottom: 1px solid rgba(52,211,153,0.2); }
+  .ta-tbl td { padding: 6px 8px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
+  .ta-tbl tr:last-child td { border-bottom: none; }
+  .ta-tbl .ta-c0 { font-family: monospace; font-weight: 700; color: var(--blue); }
+  .ta-row-frt { background: rgba(248,113,113,0.12); }
+  .ta-row-frt .ta-c2 { color: var(--red); font-weight: 700; }
+  .ta-row-pal { background: rgba(251,191,36,0.1); }
+  .ta-row-pal .ta-c2 { color: var(--yellow); font-weight: 600; }
+  .ta-row-mt .ta-c2 { color: var(--text3); }
+  .ta-foot { font-size: 11px; color: var(--text3); padding: 0 2px 4px; }
+  .ta-foot strong { color: var(--text2); }
+  .ta-editbar { display: flex; justify-content: flex-end; gap: 6px; padding-bottom: 8px; }
+  .ta-btn { padding: 5px 11px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid; }
+  .ta-btn-edit { background: var(--teal-dim); color: var(--teal); border-color: rgba(52,211,153,0.3); }
+  .ta-btn-save { background: rgba(74,222,128,0.2); color: var(--green); border-color: rgba(74,222,128,0.4); }
+  .ta-btn-cancel { background: var(--red-dim); color: var(--red); border-color: rgba(248,113,113,0.3); }
+  .ta-btn-add { background: var(--blue-dim); color: var(--blue); border-color: rgba(77,158,255,0.3); }
+  .ta-btn-del { background: none; color: var(--text3); border: 1px solid var(--border); font-size: 11px; padding: 3px 7px; border-radius: 4px; cursor: pointer; }
+  .ta-inp { background: var(--bg4); color: var(--text); border: 1px solid var(--border2); border-radius: 4px; padding: 4px 6px; font-size: 12px; width: 100%; outline: none; font-family: inherit; box-sizing: border-box; }
+  .ta-inp:focus { border-color: var(--teal); }
+  .ta-meta-row { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+  .ta-meta-f { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 80px; }
+  .ta-meta-lbl { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.4px; }
+  .ta-empty { text-align: center; color: var(--text3); font-size: 12px; padding: 20px 10px; }
 </style>
 </head>
 <body>
@@ -229,6 +266,27 @@
   <div class="tab" id="tab-tr" onclick="showTab('tr')">🔄 TRANS-<br>ITION</div>
   <div class="tab" id="tab-fi" onclick="showTab('fi')">🔍 FIND<br>MY SPOT</div>
   <div class="tab" id="tab-up" onclick="showTab('up')">📲 SEND<br>UPDATE</div>
+</div>
+
+<!-- ══════════ TRAILER AUDIT (collapsible, always visible) ══════════ -->
+<div class="ta-section" id="ta-section">
+  <div class="ta-hdr" onclick="toggleTA()">
+    <div class="ta-hdr-title">📋 TRAILER AUDIT</div>
+    <div class="ta-hdr-meta" id="ta-hdr-meta"></div>
+    <div class="ta-hdr-arrow" id="ta-hdr-arrow">▼</div>
+  </div>
+  <div id="ta-body" style="display:none;">
+    <div class="ta-stabs">
+      <button class="ta-stab active" id="ta-stab-am" onclick="showTaTab('am')">AM</button>
+      <button class="ta-stab" id="ta-stab-pm" onclick="showTaTab('pm')">PM</button>
+      <button class="ta-stab" id="ta-stab-tram" onclick="showTaTab('tram')">Transition AM</button>
+      <button class="ta-stab" id="ta-stab-trpm" onclick="showTaTab('trpm')">Transition PM</button>
+    </div>
+    <div class="ta-pan active" id="ta-pan-am"></div>
+    <div class="ta-pan" id="ta-pan-pm"></div>
+    <div class="ta-pan" id="ta-pan-tram"></div>
+    <div class="ta-pan" id="ta-pan-trpm"></div>
+  </div>
 </div>
 
 <!-- ══════════════════════════ AM SHIFT ══════════════════════════ -->
@@ -1310,6 +1368,222 @@ function clearSearch(){
   document.getElementById('searchClear').style.display='none';
   document.getElementById('searchResults').innerHTML='<div class="search-hint">👇 Type anything to find your spot<br><span style="color:#bbb;font-size:11px;">Asset number, dock door, route name, trailer ID, or keyword</span></div>';
 }
+
+// ── TRAILER AUDIT ──────────────────────────────────────────────────
+const TA_STORE='phxr_ta_v1';
+const TA_TABS=['am','pm','tram','trpm'];
+const TA_LABELS={am:'AM',pm:'PM',tram:'Transition AM',trpm:'Transition PM'};
+const TA_DEFAULT={
+  am:{
+    rows:[
+      {trailer:'H11756 + G953683',door:'5/6',contents:'MT',uld:'',notes:''},
+      {trailer:'H51899',door:'5/6',contents:'MT',uld:'',notes:''},
+      {trailer:'5374',door:'7S',contents:'Pallets',uld:'',notes:''},
+      {trailer:'707227',door:'9S',contents:'MT',uld:'',notes:''},
+      {trailer:'T705220',door:'10N',contents:'MT',uld:'',notes:''},
+      {trailer:'709630',door:'10S',contents:'MT',uld:'',notes:''},
+      {trailer:'707154',door:'11N',contents:'MT',uld:'',notes:''},
+      {trailer:'711785',door:'11S',contents:'MT',uld:'',notes:''},
+      {trailer:'711441',door:'12N',contents:'MT',uld:'',notes:''},
+      {trailer:'708360',door:'14N',contents:'MT',uld:'',notes:''},
+      {trailer:'710745',door:'16N',contents:'MT',uld:'',notes:''},
+      {trailer:'710228',door:'16S',contents:'MT',uld:'',notes:''},
+      {trailer:'707153',door:'17N',contents:'MT',uld:'',notes:''},
+      {trailer:'712050',door:'17S',contents:'MT',uld:'',notes:''},
+      {trailer:'712051',door:'18N',contents:'MT',uld:'',notes:''},
+      {trailer:'711599',door:'18S',contents:'MT',uld:'',notes:''},
+      {trailer:'711100',door:'19',contents:'MT',uld:'',notes:''},
+      {trailer:'403640',door:'20N',contents:'MT',uld:'',notes:''},
+      {trailer:'402721',door:'20S',contents:'MT',uld:'',notes:''},
+      {trailer:'403641',door:'21N',contents:'MT',uld:'',notes:''},
+      {trailer:'709552 + 710373',door:'Generator',contents:'MT',uld:'',notes:''},
+      {trailer:'402519 + 403283',door:'Generator',contents:'MT',uld:'',notes:''},
+      {trailer:'403286',door:'24N',contents:'MT',uld:'',notes:''},
+      {trailer:'710341',door:'24S',contents:'MT',uld:'',notes:''},
+      {trailer:'707240',door:'25S',contents:'MT',uld:'',notes:''},
+      {trailer:'710342',door:'26N',contents:'MT',uld:'',notes:''},
+      {trailer:'403020',door:'26S',contents:'MT',uld:'',notes:''},
+      {trailer:'403265',door:'Security',contents:'MT',uld:'',notes:''},
+      {trailer:'402941',door:'Security',contents:'MT',uld:'',notes:''},
+      {trailer:'403022',door:'Security',contents:'MT',uld:'',notes:''},
+      {trailer:'403060',door:'Security',contents:'MT',uld:'',notes:''},
+      {trailer:'402446',door:'Security',contents:'MT',uld:'',notes:''},
+    ],
+    updatedDate:'07/24/2026',updatedName:'Rich Villa',updatedEE:'190564'
+  },
+  pm:{rows:[],updatedDate:'',updatedName:'',updatedEE:''},
+  tram:{rows:[],updatedDate:'',updatedName:'',updatedEE:''},
+  trpm:{rows:[],updatedDate:'',updatedName:'',updatedEE:''}
+};
+
+let taData=null;
+let taEditMode={};
+let taCurTab='am';
+let taOpen=false;
+TA_TABS.forEach(t=>taEditMode[t]=false);
+
+function taLoad(){
+  try{
+    const s=localStorage.getItem(TA_STORE);
+    taData=s?JSON.parse(s):JSON.parse(JSON.stringify(TA_DEFAULT));
+    TA_TABS.forEach(t=>{if(!taData[t])taData[t]=JSON.parse(JSON.stringify(TA_DEFAULT[t]));});
+  }catch(e){taData=JSON.parse(JSON.stringify(TA_DEFAULT));}
+}
+function taSave(){try{localStorage.setItem(TA_STORE,JSON.stringify(taData));}catch(e){}}
+
+function taEsc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function taRowCls(c){
+  const v=String(c||'').toUpperCase().trim();
+  if(v==='FRT'||v==='FREIGHT')return 'ta-row-frt';
+  if(v==='PALLETS'||v==='PALLET'||v==='PLT')return 'ta-row-pal';
+  return 'ta-row-mt';
+}
+
+function taUpdateMeta(){
+  const d=taData[taCurTab];
+  const el=document.getElementById('ta-hdr-meta');
+  if(!el)return;
+  if(d&&(d.updatedDate||d.updatedName)){
+    el.textContent=TA_LABELS[taCurTab]+' · '+(d.updatedDate||'?')+' · '+(d.updatedName||'?')+(d.updatedEE?' EE#'+d.updatedEE:'');
+  }else{
+    el.textContent=TA_LABELS[taCurTab]+' · No entries';
+  }
+}
+
+function toggleTA(){
+  taOpen=!taOpen;
+  document.getElementById('ta-body').style.display=taOpen?'':'none';
+  document.getElementById('ta-hdr-arrow').textContent=taOpen?'▲':'▼';
+  if(taOpen){taRender(taCurTab);taUpdateMeta();}
+}
+
+function showTaTab(tab){
+  taCurTab=tab;
+  TA_TABS.forEach(t=>{
+    document.getElementById('ta-stab-'+t).className='ta-stab'+(t===tab?' active':'');
+    document.getElementById('ta-pan-'+t).className='ta-pan'+(t===tab?' active':'');
+  });
+  taRender(tab);
+  taUpdateMeta();
+}
+
+function taRender(tab){
+  const d=taData[tab];
+  const isEdit=taEditMode[tab];
+  const panel=document.getElementById('ta-pan-'+tab);
+  let h='';
+  // Edit bar
+  h+='<div class="ta-editbar">';
+  if(!isEdit){
+    h+=`<button class="ta-btn ta-btn-edit" onclick="taStartEdit('${tab}')">✏️ Edit</button>`;
+  }else{
+    h+=`<button class="ta-btn ta-btn-add" onclick="taAddRow('${tab}')">+ Row</button>`;
+    h+=`<button class="ta-btn ta-btn-save" onclick="taSaveEdit('${tab}')">💾 Save</button>`;
+    h+=`<button class="ta-btn ta-btn-cancel" onclick="taCancelEdit('${tab}')">✕ Cancel</button>`;
+  }
+  h+='</div>';
+  // Meta row (edit only)
+  if(isEdit){
+    h+='<div class="ta-meta-row">';
+    h+=`<div class="ta-meta-f"><div class="ta-meta-lbl">Date</div><input class="ta-inp" id="ta-${tab}-date" value="${taEsc(d.updatedDate)}" placeholder="MM/DD/YYYY"></div>`;
+    h+=`<div class="ta-meta-f"><div class="ta-meta-lbl">Name</div><input class="ta-inp" id="ta-${tab}-name" value="${taEsc(d.updatedName)}" placeholder="Name"></div>`;
+    h+=`<div class="ta-meta-f"><div class="ta-meta-lbl">EE#</div><input class="ta-inp" id="ta-${tab}-ee" value="${taEsc(d.updatedEE)}" placeholder="EE#"></div>`;
+    h+='</div>';
+  }
+  // Table
+  const rows=d.rows||[];
+  if(!isEdit&&rows.length===0){
+    h+='<div class="ta-empty">No entries yet. Tap ✏️ Edit to add data.</div>';
+  }else{
+    h+='<table class="ta-tbl"><tr><th>Trailer #</th><th>Door / Route</th><th>Contents</th><th>ULD #</th><th>Notes</th>'+(isEdit?'<th></th>':'')+'</tr>';
+    rows.forEach((row,i)=>{
+      if(!isEdit){
+        const rc=taRowCls(row.contents);
+        h+=`<tr class="${rc}"><td class="ta-c0">${taEsc(row.trailer)}</td><td>${taEsc(row.door)}</td><td class="ta-c2">${taEsc(row.contents)}</td><td>${taEsc(row.uld)}</td><td>${taEsc(row.notes)}</td></tr>`;
+      }else{
+        h+=`<tr>
+          <td><input class="ta-inp" id="ta-${tab}-r${i}-tr" value="${taEsc(row.trailer)}" placeholder="Trailer #"></td>
+          <td><input class="ta-inp" id="ta-${tab}-r${i}-dr" value="${taEsc(row.door)}" placeholder="Door/Route"></td>
+          <td><input class="ta-inp" id="ta-${tab}-r${i}-ct" value="${taEsc(row.contents)}" placeholder="MT / FRT / Pallets"></td>
+          <td><input class="ta-inp" id="ta-${tab}-r${i}-ul" value="${taEsc(row.uld)}" placeholder="ULD #"></td>
+          <td><input class="ta-inp" id="ta-${tab}-r${i}-nt" value="${taEsc(row.notes)}" placeholder="Notes"></td>
+          <td><button class="ta-btn-del" onclick="taDelRow('${tab}',${i})">✕</button></td>
+        </tr>`;
+      }
+    });
+    if(isEdit&&rows.length===0){
+      h+='<tr><td colspan="6" style="text-align:center;color:var(--text3);padding:12px;font-size:12px;">No rows — tap + Row to add</td></tr>';
+    }
+    h+='</table>';
+  }
+  // Footer (view only)
+  if(!isEdit&&(d.updatedDate||d.updatedName)){
+    h+=`<div class="ta-foot">Last updated: <strong>${taEsc(d.updatedDate)}</strong> by <strong>${taEsc(d.updatedName)}</strong> EE# <strong>${taEsc(d.updatedEE)}</strong></div>`;
+  }
+  panel.innerHTML=h;
+}
+
+function taCollectRows(tab){
+  const count=(taData[tab].rows||[]).length;
+  const rows=[];
+  for(let i=0;i<count;i++){
+    const g=suf=>{const el=document.getElementById('ta-'+tab+'-r'+i+'-'+suf);return el?el.value.trim():'';};
+    rows.push({trailer:g('tr'),door:g('dr'),contents:g('ct'),uld:g('ul'),notes:g('nt')});
+  }
+  return rows;
+}
+function taCollectMeta(tab){
+  const el=id=>{const e=document.getElementById('ta-'+tab+'-'+id);return e?e.value.trim():'';};
+  return{date:el('date'),name:el('name'),ee:el('ee')};
+}
+
+function taStartEdit(tab){taEditMode[tab]=true;taRender(tab);}
+
+function taCancelEdit(tab){
+  taEditMode[tab]=false;
+  taLoad();
+  taRender(tab);
+}
+
+function taSaveEdit(tab){
+  const d=taData[tab];
+  d.rows=taCollectRows(tab);
+  const m=taCollectMeta(tab);
+  d.updatedDate=m.date;
+  d.updatedName=m.name;
+  d.updatedEE=m.ee;
+  taSave();
+  taEditMode[tab]=false;
+  taRender(tab);
+  taUpdateMeta();
+}
+
+function taAddRow(tab){
+  const d=taData[tab];
+  d.rows=taCollectRows(tab);
+  const m=taCollectMeta(tab);
+  d.updatedDate=m.date||d.updatedDate;
+  d.updatedName=m.name||d.updatedName;
+  d.updatedEE=m.ee||d.updatedEE;
+  d.rows.push({trailer:'',door:'',contents:'MT',uld:'',notes:''});
+  taRender(tab);
+}
+
+function taDelRow(tab,idx){
+  const d=taData[tab];
+  d.rows=taCollectRows(tab);
+  const m=taCollectMeta(tab);
+  d.updatedDate=m.date||d.updatedDate;
+  d.updatedName=m.name||d.updatedName;
+  d.updatedEE=m.ee||d.updatedEE;
+  d.rows.splice(idx,1);
+  taRender(tab);
+}
+
+// Bootstrap Trailer Audit
+taLoad();
+taUpdateMeta();
 </script>
 </body>
 </html>
