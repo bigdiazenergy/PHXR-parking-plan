@@ -1376,44 +1376,45 @@ function clearSearch(){
 }
 
 // ── TRAILER AUDIT ──────────────────────────────────────────────────
-const TA_STORE='phxr_ta_v5';
+const TA_STORE='phxr_ta_v6';
 const TA_TABS=['am','pm','tram','trpm'];
 const TA_LABELS={am:'AM',pm:'PM',tram:'Transition AM',trpm:'Transition PM'};
 const TA_LATEST_AUDIT_ROWS=[
-  {trailer:'403225',door:'door 5/6',contents:'MT',uld:'',notes:''},
-  {trailer:'97570611',door:'7N',contents:'MT',uld:'',notes:''},
+  {trailer:'1170425',door:'door 5/6',contents:'MT',uld:'',notes:''},
+  {trailer:'1910372',door:'door 5/6',contents:'MT',uld:'',notes:''},
+  {trailer:'707240',door:'7N',contents:'MT',uld:'',notes:''},
   {trailer:'7003',door:'7S',contents:'Pallets',uld:'',notes:''},
-  {trailer:'707227',door:'9S',contents:'MT',uld:'',notes:''},
-  {trailer:'704710',door:'10N',contents:'MT',uld:'',notes:''},
-  {trailer:'711441',door:'10S',contents:'MT',uld:'',notes:''},
-  {trailer:'710745',door:'gap space',contents:'MT',uld:'',notes:''},
-  {trailer:'711795',door:'11N',contents:'MT',uld:'',notes:''},
-  {trailer:'712053',door:'11S',contents:'MT',uld:'',notes:''},
-  {trailer:'710744',door:'12N',contents:'MT',uld:'',notes:''},
-  {trailer:'710227',door:'14S',contents:'MT',uld:'',notes:''},
-  {trailer:'703010',door:'15N',contents:'MT',uld:'',notes:''},
-  {trailer:'710228',door:'16N',contents:'MT',uld:'',notes:''},
-  {trailer:'711783',door:'16S',contents:'MT',uld:'',notes:''},
-  {trailer:'711785',door:'17N',contents:'MT',uld:'',notes:''},
-  {trailer:'712050',door:'18N',contents:'MT',uld:'',notes:''},
-  {trailer:'711599',door:'18S',contents:'MT',uld:'',notes:''},
-  {trailer:'711443',door:'',contents:'MT',uld:'',notes:''},
-  {trailer:'403266',door:'',contents:'MT',uld:'',notes:''},
-  {trailer:'403285',door:'',contents:'MT',uld:'',notes:''},
-  {trailer:'403641',door:'',contents:'MT',uld:'',notes:''},
-  {trailer:'402721',door:'',contents:'MT',uld:'',notes:''},
-  {trailer:'403320 / 402859',door:'',contents:'MT',uld:'',notes:''},
-  {trailer:'402283',door:'',contents:'MT',uld:'',notes:''},
-  {trailer:'710341',door:'',contents:'MT',uld:'',notes:''},
-  {trailer:'709228',door:'',contents:'HWT',uld:'',notes:''},
-  {trailer:'707236',door:'',contents:'MT',uld:'',notes:''},
-  {trailer:'710342',door:'',contents:'MT',uld:'',notes:''},
-  {trailer:'402519 / 401667',door:'',contents:'MT',uld:'',notes:''},
-  {trailer:'403060',door:'',contents:'MT',uld:'',notes:''},
-  {trailer:'402941',door:'',contents:'MT',uld:'',notes:''},
-  {trailer:'402583',door:'',contents:'MT',uld:'',notes:''},
+  {trailer:'707239',door:'9S',contents:'MT',uld:'',notes:''},
+  {trailer:'1955837',door:'10N',contents:'MT',uld:'',notes:''},
+  {trailer:'711784',door:'gap space',contents:'MT',uld:'',notes:''},
+  {trailer:'711788',door:'11N',contents:'MT',uld:'',notes:''},
+  {trailer:'711441',door:'11S',contents:'MT',uld:'',notes:''},
+  {trailer:'708215',door:'12N',contents:'MT',uld:'',notes:''},
+  {trailer:'710226',door:'13N',contents:'MT',uld:'',notes:''},
+  {trailer:'708323',door:'14N',contents:'MT',uld:'',notes:''},
+  {trailer:'710744',door:'14S',contents:'MT',uld:'',notes:''},
+  {trailer:'712052',door:'16N',contents:'MT',uld:'',notes:''},
+  {trailer:'705783',door:'17N',contents:'MT',uld:'',notes:''},
+  {trailer:'712056',door:'18N',contents:'MT',uld:'',notes:''},
+  {trailer:'712051',door:'18S',contents:'MT',uld:'',notes:''},
+  {trailer:'711599',door:'19',contents:'MT',uld:'',notes:''},
+  {trailer:'402859',door:'rest loop at 19',contents:'MT',uld:'',notes:''},
+  {trailer:'403266',door:'rest loop at 19',contents:'MT',uld:'',notes:''},
+  {trailer:'403641',door:'21N',contents:'MT',uld:'',notes:''},
+  {trailer:'402721',door:'21S',contents:'MT',uld:'',notes:''},
+  {trailer:'402859',door:'generator',contents:'MT',uld:'',notes:''},
+  {trailer:'403283',door:'24N',contents:'MT',uld:'',notes:''},
+  {trailer:'710341',door:'24S',contents:'MT',uld:'',notes:''},
+  {trailer:'709552',door:'25S',contents:'HWT',uld:'',notes:''},
+  {trailer:'710342',door:'26N',contents:'MT',uld:'',notes:''},
+  {trailer:'402519 / 401667',door:'26S',contents:'MT',uld:'',notes:''},
+  {trailer:'402941',door:'security',contents:'MT',uld:'',notes:''},
+  {trailer:'403060',door:'security',contents:'MT',uld:'',notes:''},
+  {trailer:'402583',door:'security',contents:'MT',uld:'',notes:''},
+  {trailer:'403286',door:'security',contents:'MT',uld:'',notes:''},
+  {trailer:'402446',door:'security',contents:'MT',uld:'',notes:''},
 ];
-const TA_LATEST_AUDIT_META={updatedDate:'08/13/2026',updatedName:'Rich Villa',updatedEE:'190564'};
+const TA_LATEST_AUDIT_META={updatedDate:'08/14/2026',updatedName:'Rich Villa',updatedEE:'190564'};
 function taLatestAudit(){
   return {...TA_LATEST_AUDIT_META,rows:TA_LATEST_AUDIT_ROWS.map(r=>({...r}))};
 }
