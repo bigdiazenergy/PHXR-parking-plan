@@ -132,7 +132,11 @@ $lastError = $null
 
 while ((Get-Date) -lt $deadline) {
     try {
-        $uri = "$LiveUrl?meka_verify=$cacheBust"
+        $separator = "?"
+        if ($LiveUrl.Contains("?")) {
+            $separator = "&"
+        }
+        $uri = "$($LiveUrl)$($separator)meka_verify=$cacheBust"
         $response = Invoke-WebRequest -UseBasicParsing -Uri $uri -TimeoutSec 20
         if ($response.StatusCode -ge 200 -and $response.StatusCode -lt 300) {
             if ([string]::IsNullOrWhiteSpace($ExpectedText) -or $response.Content.Contains($ExpectedText)) {
