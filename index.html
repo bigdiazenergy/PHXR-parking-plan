@@ -1283,30 +1283,33 @@ function clearSearch(){
 }
 
 // ── TRAILER AUDIT ──────────────────────────────────────────────────
-const TA_STORE='phxr_ta_v8';
+const TA_STORE='phxr_ta_v9';
 const TA_TABS=['am','pm','tram','trpm'];
 const TA_LABELS={am:'AM',pm:'PM',tram:'Transition AM',trpm:'Transition PM'};
 const TA_LATEST_AUDIT_ROWS=[
-  {trailer:'715',door:'7N',contents:'Pallets',uld:'',notes:''},
-  {trailer:'X18071',door:'8N',contents:'MT',uld:'',notes:''},
-  {trailer:'X17885',door:'8S',contents:'MT',uld:'',notes:''},
-  {trailer:'706828',door:'9S',contents:'MT',uld:'',notes:''},
-  {trailer:'707837',door:'11S',contents:'MT',uld:'',notes:''},
-  {trailer:'707592',door:'14N',contents:'MT',uld:'',notes:''},
-  {trailer:'708359',door:'14S',contents:'MT',uld:'',notes:''},
-  {trailer:'718104',door:'15N',contents:'MT',uld:'',notes:''},
-  {trailer:'712051',door:'15S',contents:'MT',uld:'',notes:''},
-  {trailer:'705733',door:'16N',contents:'MT',uld:'',notes:''},
-  {trailer:'711788',door:'17S',contents:'ULD',uld:'',notes:''},
-  {trailer:'713468',door:'18S',contents:'MT',uld:'',notes:''},
-  {trailer:'716236',door:'19N',contents:'MT',uld:'',notes:''},
-  {trailer:'403641',door:'19S',contents:'MT',uld:'',notes:''},
-  {trailer:'706680',door:'21S',contents:'MT',uld:'',notes:''},
-  {trailer:'170188',door:'24N',contents:'MT',uld:'',notes:''},
-  {trailer:'FEDZ571830',door:'24S',contents:'MT',uld:'',notes:''},
-  {trailer:'14553',door:'',contents:'MT',uld:'',notes:''},
+  {trailer:'Total Trailer 403103',door:'26 North',contents:'MT',uld:'',notes:''},
+  {trailer:'403286',door:'24 North',contents:'FRT',uld:'',notes:''},
+  {trailer:'403020',door:'23 South',contents:'MT',uld:'',notes:''},
+  {trailer:'403286',door:'21 South',contents:'FRT',uld:'',notes:''},
+  {trailer:'710278',door:'21 North',contents:'FRT',uld:'',notes:''},
+  {trailer:'710342',door:'20 South',contents:'FRT',uld:'',notes:''},
+  {trailer:'403641',door:'20 North',contents:'MT',uld:'',notes:''},
+  {trailer:'711784',door:'19 South',contents:'FRT',uld:'',notes:''},
+  {trailer:'707837',door:'17 South',contents:'FRT',uld:'',notes:'North Phoenix'},
+  {trailer:'711596',door:'17 South',contents:'FRT',uld:'',notes:'Chandler ground'},
+  {trailer:'708316',door:'17 North',contents:'FRT',uld:'',notes:'M/C 02'},
+  {trailer:'712053',door:'16 South',contents:'FRT',uld:'',notes:'SCE 02'},
+  {trailer:'709010',door:'16 North',contents:'MT',uld:'',notes:'ZSY92'},
+  {trailer:'711980',door:'14 South',contents:'MT',uld:'',notes:''},
+  {trailer:'Heartland Express X17767',door:'14 North',contents:'MT',uld:'',notes:''},
+  {trailer:'707581',door:'13 South',contents:'MT',uld:'',notes:''},
+  {trailer:'FedEx Ground 553788',door:'12 North',contents:'MT',uld:'',notes:''},
+  {trailer:'709308',door:'11 South',contents:'MT',uld:'',notes:''},
+  {trailer:'709682',door:'11 North',contents:'MT',uld:'',notes:''},
+  {trailer:'Heartland Express X12261',door:'9 North',contents:'MT',uld:'',notes:''},
+  {trailer:'Heartland Express X12465',door:'6 North',contents:'MT',uld:'',notes:''},
 ];
-const TA_LATEST_AUDIT_META={updatedDate:'10/22/2026',updatedName:'PHXR',updatedEE:''};
+const TA_LATEST_AUDIT_META={updatedDate:'11/2/2026',updatedTime:'0010',updatedName:'Thomas Wilborn',updatedEE:'4422645'};
 function taLatestAudit(){
   return {...TA_LATEST_AUDIT_META,rows:TA_LATEST_AUDIT_ROWS.map(r=>({...r}))};
 }
@@ -1346,7 +1349,7 @@ function taUpdateMeta(){
   const el=document.getElementById('ta-hdr-meta');
   if(!el)return;
   if(d&&(d.updatedDate||d.updatedName)){
-    el.textContent=TA_LABELS[taCurTab]+' · '+(d.updatedDate||'?')+' · '+(d.updatedName||'?')+(d.updatedEE?' EE#'+d.updatedEE:'');
+    el.textContent=TA_LABELS[taCurTab]+' · '+(d.updatedDate||'?')+(d.updatedTime?' '+d.updatedTime:'')+' · '+(d.updatedName||'?')+(d.updatedEE?' EE#'+d.updatedEE:'');
   }else{
     el.textContent=TA_LABELS[taCurTab]+' · No entries';
   }
@@ -1429,6 +1432,7 @@ function taRender(tab){
   if(isEdit){
     h+='<div class="ta-meta-row">';
     h+=`<div class="ta-meta-f"><div class="ta-meta-lbl">Date</div><input class="ta-inp" id="ta-${tab}-date" value="${taEsc(d.updatedDate)}" placeholder="MM/DD/YYYY"></div>`;
+    h+=`<div class="ta-meta-f"><div class="ta-meta-lbl">Time</div><input class="ta-inp" id="ta-${tab}-time" value="${taEsc(d.updatedTime)}" placeholder="HHMM"></div>`;
     h+=`<div class="ta-meta-f"><div class="ta-meta-lbl">Name</div><input class="ta-inp" id="ta-${tab}-name" value="${taEsc(d.updatedName)}" placeholder="Name"></div>`;
     h+=`<div class="ta-meta-f"><div class="ta-meta-lbl">EE#</div><input class="ta-inp" id="ta-${tab}-ee" value="${taEsc(d.updatedEE)}" placeholder="EE#"></div>`;
     h+='</div>';
@@ -1461,7 +1465,7 @@ function taRender(tab){
   }
   // Footer (view only)
   if(!isEdit&&(d.updatedDate||d.updatedName)){
-    h+=`<div class="ta-foot">Last updated: <strong>${taEsc(d.updatedDate)}</strong> by <strong>${taEsc(d.updatedName)}</strong> EE# <strong>${taEsc(d.updatedEE)}</strong></div>`;
+    h+=`<div class="ta-foot">Last updated: <strong>${taEsc(d.updatedDate)}</strong>${d.updatedTime?' at <strong>'+taEsc(d.updatedTime)+'</strong>':''} by <strong>${taEsc(d.updatedName)}</strong> EE# <strong>${taEsc(d.updatedEE)}</strong></div>`;
   }
   panel.innerHTML=h;
 }
@@ -1477,7 +1481,7 @@ function taCollectRows(tab){
 }
 function taCollectMeta(tab){
   const el=id=>{const e=document.getElementById('ta-'+tab+'-'+id);return e?e.value.trim():'';};
-  return{date:el('date'),name:el('name'),ee:el('ee')};
+  return{date:el('date'),time:el('time'),name:el('name'),ee:el('ee')};
 }
 
 function taStartEdit(tab){taEditMode[tab]=true;taRender(tab);}
@@ -1493,6 +1497,7 @@ function taSaveEdit(tab){
   d.rows=taCollectRows(tab);
   const m=taCollectMeta(tab);
   d.updatedDate=m.date;
+  d.updatedTime=m.time;
   d.updatedName=m.name;
   d.updatedEE=m.ee;
   taSave();
@@ -1506,6 +1511,7 @@ function taAddRow(tab){
   d.rows=taCollectRows(tab);
   const m=taCollectMeta(tab);
   d.updatedDate=m.date||d.updatedDate;
+  d.updatedTime=m.time||d.updatedTime;
   d.updatedName=m.name||d.updatedName;
   d.updatedEE=m.ee||d.updatedEE;
   d.rows.push({trailer:'',door:'',contents:'MT',uld:'',notes:''});
@@ -1517,6 +1523,7 @@ function taDelRow(tab,idx){
   d.rows=taCollectRows(tab);
   const m=taCollectMeta(tab);
   d.updatedDate=m.date||d.updatedDate;
+  d.updatedTime=m.time||d.updatedTime;
   d.updatedName=m.name||d.updatedName;
   d.updatedEE=m.ee||d.updatedEE;
   d.rows.splice(idx,1);
