@@ -296,7 +296,7 @@
     <div class="shift-sub">Tue – Sat &nbsp;|&nbsp; DURING A.M. OPS &nbsp;·&nbsp; Updated 8/19/26</div>
   </div>
   <div class="alert"><strong>⚠️ IMPORTANT</strong> If your trailer doesn't appear on this plan, go to the yard and drop it. Park tractor in designated tractor parking. Questions → ask yard director.</div>
-  <div class="alert alert-info"><strong>🚛 INBOUND 8/19 — PHXRT BA013</strong> Trailer <strong>2011</strong> · VESSEL cons 304692184875 · ETA ~2pm · PER Robbie/PLQL &nbsp;|&nbsp; MC699 TOTAL · VESSEL cons 304692520121 &nbsp;|&nbsp; TA577 CXL</div>
+  <div class="alert alert-info"><strong>🚛 CURRENT INBOUND — Updated 11/09/2026 5:09 PM</strong> PHXR · TOTAL trailer <strong>100089</strong> · Status: <strong>Inbound</strong></div>
 
   <div class="legend">
     <div class="legend-item"><div class="legend-dot dot-trailer"></div>Trailer</div>
@@ -773,7 +773,7 @@
 
     <div class="section-head">📥 Inbound Trucks</div>
     <div class="door-list">
-      <div class="door-row"><div class="door-label">PHXR</div><div class="door-content"><span class="badge badge-teal">TOTAL</span> <span class="asset-num">100089</span><div class="door-note">Inbound</div></div></div>
+      <div class="door-row"><div class="door-label">PHXR</div><div class="door-content"><span class="badge badge-teal">TOTAL</span> <span class="asset-num">100089</span><div class="door-note">Inbound · Updated 11/09/2026 5:09 PM</div></div></div>
     </div>
     <button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆ Back to Top</button>
   </div><!-- end tr-am -->
@@ -1107,7 +1107,7 @@ const DB=[
   {s:'tr',d:'Dr 8S (AM→PM)',a:'FEDEX 706318 · Walmart',n:'Current dock situation'},
   {s:'tr',d:'Dr 9N (AM→PM)',a:'TOTAL 310322 · MC478',n:'Current dock situation'},
   {s:'tr',d:'Dr 10S (AM→PM)',a:'TOTAL 170122 · IC003',n:'Current dock situation'},
-  {s:'tr',d:'Inbound Trucks (AM→PM)',a:'PHXR · TOTAL 100089',n:'Inbound'},
+  {s:'tr',d:'Inbound Trucks (AM→PM)',a:'PHXR · TOTAL 100089',n:'Inbound · Updated 11/09/2026 5:09 PM'},
   {s:'all',d:'Spares — Tractors',a:'301513 · 303771(T) · 304703(T) · 304012(T)',n:'T = Training asset'},
   {s:'all',d:'Spares — Str. Trucks',a:'401230 · 401549 · 401553 · 401600 · 401667',n:''},
   {s:'all',d:'Spares — Lift Gate 28ft',a:'704374(T) · 704376 · 704908 · 704675',n:''},
@@ -1372,38 +1372,26 @@ function taRender(tab){
     h+=`<div id="ta-inbound-wrap" style="margin-bottom:10px;border-radius:8px;overflow:hidden;border:1px solid rgba(251,191,36,0.35);">
       <div onclick="(function(){var b=document.getElementById('ta-inbound-body');var a=document.getElementById('ta-inbound-arrow');if(b.style.display==='none'){b.style.display='';a.textContent='▲';}else{b.style.display='none';a.textContent='▼';}})()" style="display:flex;align-items:center;gap:8px;padding:9px 12px;background:rgba(251,191,36,0.14);border-bottom:1px solid rgba(251,191,36,0.3);cursor:pointer;user-select:none;">
         <span style="font-size:13px;font-weight:700;color:var(--yellow);letter-spacing:0.6px;flex:1;">📥 INBOUND TRUCKS</span>
-        <span style="font-size:10px;color:var(--text3);">Nyesha Eligar → PHXRLEADERS · Updated 08/06/2026</span>
+        <span style="font-size:10px;color:var(--text3);">Updated 11/09/2026 5:09 PM</span>
         <span id="ta-inbound-arrow" style="font-size:10px;color:var(--yellow);">▲</span>
       </div>
       <div id="ta-inbound-body" style="background:var(--bg3);">
         <table style="width:100%;border-collapse:collapse;font-size:12px;">
           <tr style="background:rgba(251,191,36,0.12);">
             <th style="padding:6px 10px;text-align:left;font-size:10px;letter-spacing:0.4px;text-transform:uppercase;color:var(--yellow);border-bottom:1px solid rgba(251,191,36,0.2);">Route</th>
+            <th style="padding:6px 10px;text-align:left;font-size:10px;letter-spacing:0.4px;text-transform:uppercase;color:var(--yellow);border-bottom:1px solid rgba(251,191,36,0.2);">Carrier</th>
             <th style="padding:6px 10px;text-align:left;font-size:10px;letter-spacing:0.4px;text-transform:uppercase;color:var(--yellow);border-bottom:1px solid rgba(251,191,36,0.2);">Trailer #</th>
-            <th style="padding:6px 10px;text-align:left;font-size:10px;letter-spacing:0.4px;text-transform:uppercase;color:var(--yellow);border-bottom:1px solid rgba(251,191,36,0.2);">VESSEL Cons #</th>
             <th style="padding:6px 10px;text-align:left;font-size:10px;letter-spacing:0.4px;text-transform:uppercase;color:var(--yellow);border-bottom:1px solid rgba(251,191,36,0.2);">Status</th>
           </tr>
-          <tr style="border-bottom:1px solid var(--border);">
-            <td style="padding:7px 10px;font-weight:700;color:var(--blue);">MC478</td>
-            <td style="padding:7px 10px;font-family:monospace;color:var(--text);">180441</td>
-            <td style="padding:7px 10px;font-family:monospace;color:var(--text2);font-size:11px;">304688392751</td>
-            <td style="padding:7px 10px;color:var(--text3);font-size:11px;">—</td>
-          </tr>
-          <tr style="background:rgba(248,113,113,0.14);border-left:3px solid var(--red);">
-            <td style="padding:7px 10px;font-weight:700;color:var(--red);">MC699</td>
-            <td style="padding:7px 10px;font-family:monospace;color:var(--text);font-weight:700;">705220</td>
-            <td style="padding:7px 10px;font-family:monospace;color:var(--text2);font-size:11px;">304687994445</td>
-            <td style="padding:7px 10px;font-size:11px;color:var(--red);font-weight:600;">⚠️ ARRIVED LAST NIGHT (PM SHIFT) — NOT MARKED AS ARRIVED<br><span style="font-size:10px;color:var(--text3);font-weight:400;">Flagged by Brittney Fitzgerald</span></td>
-          </tr>
           <tr style="background:rgba(251,191,36,0.08);border-bottom:1px solid var(--border);">
-            <td style="padding:7px 10px;font-weight:700;color:var(--yellow);">MC699</td>
-            <td style="padding:7px 10px;font-family:monospace;color:var(--text);font-weight:700;">403239</td>
-            <td style="padding:7px 10px;font-family:monospace;color:var(--text2);font-size:11px;">304690465810</td>
-            <td style="padding:7px 10px;color:var(--text3);font-size:11px;">Inbound check 8/6/26</td>
+            <td style="padding:7px 10px;font-weight:700;color:var(--yellow);">PHXR</td>
+            <td style="padding:7px 10px;font-weight:700;color:var(--teal);">TOTAL</td>
+            <td style="padding:7px 10px;font-family:monospace;color:var(--text);font-weight:700;">100089</td>
+            <td style="padding:7px 10px;color:var(--yellow);font-size:11px;font-weight:600;">Inbound<br><span style="font-size:10px;color:var(--text3);font-weight:400;">11/09/2026 5:09 PM</span></td>
           </tr>
         </table>
         <div style="padding:7px 10px;font-size:10px;color:var(--text3);background:rgba(251,191,36,0.06);border-top:1px solid rgba(251,191,36,0.15);font-style:italic;">
-          Source: Inbound TRUCKS emails — Nyesha Eligar → PHXRLEADERS | 07/24/2026 9:43 AM and 08/06/2026 | CC: Ashley Thompson | Flag raised by Brittney Fitzgerald
+          Current inbound status from the PHX yard update · Last communicated 11/09/2026 at 5:09 PM
         </div>
       </div>
     </div>`;
