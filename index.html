@@ -1283,33 +1283,32 @@ function clearSearch(){
 }
 
 // ── TRAILER AUDIT ──────────────────────────────────────────────────
-const TA_STORE='phxr_ta_v9';
+const TA_STORE='phxr_ta_v10';
 const TA_TABS=['am','pm','tram','trpm'];
 const TA_LABELS={am:'AM',pm:'PM',tram:'Transition AM',trpm:'Transition PM'};
 const TA_LATEST_AUDIT_ROWS=[
-  {trailer:'Total Trailer 403103',door:'26 North',contents:'MT',uld:'',notes:''},
-  {trailer:'403286',door:'24 North',contents:'FRT',uld:'',notes:''},
-  {trailer:'403020',door:'23 South',contents:'MT',uld:'',notes:''},
-  {trailer:'403286',door:'21 South',contents:'FRT',uld:'',notes:''},
-  {trailer:'710278',door:'21 North',contents:'FRT',uld:'',notes:''},
-  {trailer:'710342',door:'20 South',contents:'FRT',uld:'',notes:''},
-  {trailer:'403641',door:'20 North',contents:'MT',uld:'',notes:''},
-  {trailer:'711784',door:'19 South',contents:'FRT',uld:'',notes:''},
-  {trailer:'707837',door:'17 South',contents:'FRT',uld:'',notes:'North Phoenix'},
-  {trailer:'711596',door:'17 South',contents:'FRT',uld:'',notes:'Chandler ground'},
-  {trailer:'708316',door:'17 North',contents:'FRT',uld:'',notes:'M/C 02'},
-  {trailer:'712053',door:'16 South',contents:'FRT',uld:'',notes:'SCE 02'},
-  {trailer:'709010',door:'16 North',contents:'MT',uld:'',notes:'ZSY92'},
-  {trailer:'711980',door:'14 South',contents:'MT',uld:'',notes:''},
-  {trailer:'Heartland Express X17767',door:'14 North',contents:'MT',uld:'',notes:''},
-  {trailer:'707581',door:'13 South',contents:'MT',uld:'',notes:''},
-  {trailer:'FedEx Ground 553788',door:'12 North',contents:'MT',uld:'',notes:''},
-  {trailer:'709308',door:'11 South',contents:'MT',uld:'',notes:''},
-  {trailer:'709682',door:'11 North',contents:'MT',uld:'',notes:''},
-  {trailer:'Heartland Express X12261',door:'9 North',contents:'MT',uld:'',notes:''},
-  {trailer:'Heartland Express X12465',door:'6 North',contents:'MT',uld:'',notes:''},
+  {trailer:'402941',door:'Customer Service',contents:'MT',uld:'',notes:''},
+  {trailer:'403641',door:'Customer Service',contents:'MT',uld:'',notes:''},
+  {trailer:'402446',door:'Customer Service',contents:'MT',uld:'',notes:''},
+  {trailer:'Heartland X17898',door:'5N',contents:'MT',uld:'',notes:''},
+  {trailer:'Total 100089',door:'5S',contents:'MT',uld:'',notes:''},
+  {trailer:'707239',door:'6N',contents:'MT',uld:'dunnage',notes:''},
+  {trailer:'PPR pallet trailer 599005',door:'7S',contents:'MT',uld:'pallets',notes:''},
+  {trailer:'Ground FEDZ554579',door:'8N',contents:'MT',uld:'',notes:''},
+  {trailer:'706816',door:'Walmart - 8S',contents:'FRT',uld:'BULK loaded',notes:''},
+  {trailer:'Total 310322',door:'MC478 - 9N',contents:'FRT',uld:'BULK loaded',notes:''},
+  {trailer:'Total 170122',door:'IC003 - 10S',contents:'FRT',uld:'BULK loaded',notes:''},
+  {trailer:'704376',door:'11N',contents:'MT',uld:'',notes:''},
+  {trailer:'709010',door:'11S',contents:'MT',uld:'',notes:''},
+  {trailer:'Total 903583',door:'12S',contents:'MT',uld:'',notes:''},
+  {trailer:'Heartland X12167',door:'13S',contents:'MT',uld:'',notes:''},
+  {trailer:'711596',door:'16N',contents:'MT',uld:'',notes:''},
+  {trailer:'401667',door:'26N',contents:'MT',uld:'',notes:''},
+  {trailer:'403060',door:'26S',contents:'MT',uld:'',notes:''},
+  {trailer:'402519',door:'VMX',contents:'MT',uld:'',notes:''},
+  {trailer:'402721',door:'VMX',contents:'MT',uld:'',notes:''},
 ];
-const TA_LATEST_AUDIT_META={updatedDate:'11/2/2026',updatedTime:'0010',updatedName:'Thomas Wilborn',updatedEE:'4422645'};
+const TA_LATEST_AUDIT_META={updatedDate:'11/9/2026',updatedTime:'',updatedName:'Guillermo Siqueiros',updatedEE:'766570'};
 function taLatestAudit(){
   return {...TA_LATEST_AUDIT_META,rows:TA_LATEST_AUDIT_ROWS.map(r=>({...r}))};
 }
