@@ -529,7 +529,7 @@
     <div class="door-row"><div class="door-label">Dr 13N</div><div class="door-content"><span class="badge badge-yellow">53' Trailer Overflow</span><div class="door-note">Separate dock</div></div></div>
     <div class="door-row"><div class="door-label">Dr 13S</div><div class="door-content"><span class="badge badge-yellow">53' Trailer Overflow</span><div class="door-note">Separate dock</div></div></div>
     <div class="door-row"><div class="door-label">Dr 14N</div><div class="door-content"><span class="badge badge-blue">LA Trailer</span></div></div>
-    <div class="door-row empty-row"><div class="door-label">Dr 14S</div><div class="door-content"><span class="badge badge-gray">Empty / Overflow</span></div></div>
+    <div class="door-row highlight"><div class="door-label">Dr 14S</div><div class="door-content"><div><span class="badge badge-blue">FedEx Trailer</span> <span class="badge badge-orange">Truck 305861</span></div><div class="door-note">Enrique Martinez · Emp# 5026040 · Start 1200</div></div></div>
     <div class="door-row"><div class="door-label">Dr 15N</div><div class="door-content"><div><span class="badge badge-blue">LAX (PM)</span> <span class="badge badge-orange">Tractor 305224</span></div></div></div>
     <div class="door-row"><div class="door-label">Dr 15S</div><div class="door-content"><div><span class="badge badge-blue">YUMA</span> <span class="badge badge-orange">Roller</span> <span class="asset-num">304439</span></div><div class="door-note">Otto Kazmer</div></div></div>
     <div class="door-row empty-row"><div class="door-label">Dr 16N</div><div class="door-content"><span class="badge badge-gray">Empty</span></div></div>
@@ -699,7 +699,7 @@
       <div class="door-row"><div class="door-label">Dr 13N</div><div class="door-content"><span class="badge badge-blue">Trailer 53' Roller</span></div></div>
       <div class="door-row"><div class="door-label">Dr 13S</div><div class="door-content"><span class="badge badge-blue">Trailer 53' Roller</span></div></div>
       <div class="door-row"><div class="door-label">Dr 14N</div><div class="door-content"><span class="badge badge-blue">Trailer 53' Roller</span></div></div>
-      <div class="door-row"><div class="door-label">Dr 14S</div><div class="door-content"><span class="badge badge-blue">Trailer 53' Roller</span></div></div>
+      <div class="door-row highlight"><div class="door-label">Dr 14S</div><div class="door-content"><div><span class="badge badge-blue">FedEx Trailer</span> <span class="badge badge-orange">Truck 305861</span></div><div class="door-note">Enrique Martinez · Emp# 5026040 · Start 1200 · After PM setup</div></div></div>
       <div class="door-row"><div class="door-label">Dr 15N</div><div class="door-content"><span class="badge badge-blue">LAX</span> <span class="asset-num">306225</span></div></div>
       <div class="door-row"><div class="door-label">Dr 15S</div><div class="door-content"><span class="badge badge-blue">Trailer 53' Roller</span></div></div>
       <div class="door-row"><div class="door-label">Dr 16N</div><div class="door-content"><span class="badge badge-blue">Trailer 53' Roller</span> <span class="asset-num">← TUSR</span></div></div>
@@ -1006,7 +1006,7 @@ const DB=[
   {s:'pm',d:'Dr 13N',a:"53' Trailer Overflow — Separate dock",n:''},
   {s:'pm',d:'Dr 13S',a:"53' Trailer Overflow — Separate dock",n:''},
   {s:'pm',d:'Dr 14N',a:'LA Trailer',n:'Tractor 305224 moved to Dr 15N'},
-  {s:'pm',d:'Dr 14S',a:'Empty / Overflow',n:''},
+  {s:'pm',d:'Dr 14S',a:'FedEx Trailer · Truck 305861',n:'Enrique Martinez · Emp# 5026040 · Start 1200'},
   {s:'pm',d:'Dr 15N',a:'LAX (PM) + Tractor 305224',n:''},
   {s:'pm',d:'Dr 15S',a:'Empty',n:''},
   {s:'pm',d:'Dr 16N',a:'Overflow — Any Type',n:'Available for overflow of any type'},
@@ -1041,7 +1041,7 @@ const DB=[
   {s:'tr',d:'Dr 13N (PM→AM)',a:"Trailer 53' Roller",n:''},
   {s:'tr',d:'Dr 13S (PM→AM)',a:"Trailer 53' Roller",n:''},
   {s:'tr',d:'Dr 14N (PM→AM)',a:"Trailer 53' Roller",n:''},
-  {s:'tr',d:'Dr 14S (PM→AM)',a:"Trailer 53' Roller",n:''},
+  {s:'tr',d:'Dr 14S (PM→AM)',a:'FedEx Trailer · Truck 305861',n:'Enrique Martinez · Emp# 5026040 · Start 1200 · After PM setup'},
   {s:'tr',d:'Dr 15N (PM→AM)',a:'LAX · 306225',n:''},
   {s:'tr',d:'Dr 15S (PM→AM)',a:"Trailer 53' Roller",n:''},
   {s:'tr',d:'Dr 16N (PM→AM)',a:"Trailer 53' Roller ← TUSR",n:''},
@@ -1167,7 +1167,7 @@ const DB=[
   {s:'pm',d:'Gary Mollo',a:'Unit 305573',n:'Emp# 807507 · Start 1200'},
   {s:'pm',d:'James Barragan',a:'Unit 306176',n:'Emp# 911406 · Start 1200'},
   {s:'pm',d:'Drew Howe',a:'Unit 305752',n:'Emp# 3739868 · Start 1200'},
-  {s:'pm',d:'Enrique Martinez',a:'Unit 305861',n:'Emp# 5026040 · Start 1200'},
+  {s:'pm',d:'Enrique Martinez',a:'Unit 305861 · Dr 14S · FedEx Trailer',n:'Emp# 5026040 · Start 1200 · After PM setup'},
   {s:'pm',d:'Otto Kazmer',a:'Unit 305439',n:'Emp# 144365 · Start 1200'},
   {s:'pm',d:'Brian Chick',a:'Unit 305575',n:'Emp# 429890 · Start 1230'},
   {s:'pm',d:'Hansel Cedillos',a:'Unit 306224',n:'Emp# 655184 · Start 1945'},
@@ -1180,7 +1180,7 @@ const DB=[
   {s:'pm',d:'Unit 305573',a:'Gary Mollo',n:'Emp# 807507 · Start 1200'},
   {s:'pm',d:'Unit 306176',a:'James Barragan',n:'Emp# 911406 · Start 1200'},
   {s:'pm',d:'Unit 305752',a:'Drew Howe',n:'Emp# 3739868 · Start 1200'},
-  {s:'pm',d:'Unit 305861',a:'Enrique Martinez',n:'Emp# 5026040 · Start 1200'},
+  {s:'pm',d:'Unit 305861',a:'Enrique Martinez · Dr 14S · FedEx Trailer',n:'Emp# 5026040 · Start 1200 · After PM setup'},
   {s:'pm',d:'Unit 305439',a:'Otto Kazmer',n:'Emp# 144365 · Start 1200'},
   {s:'pm',d:'Unit 305575',a:'Brian Chick',n:'Emp# 429890 · Start 1230'},
   {s:'pm',d:'Unit 306224',a:'Hansel Cedillos',n:'Emp# 655184 · Start 1945'},
@@ -1194,7 +1194,7 @@ const DB=[
   {s:'pm',d:'Emp# 807507',a:'Gary Mollo · Unit 305573',n:'Start 1200'},
   {s:'pm',d:'Emp# 911406',a:'James Barragan · Unit 306176',n:'Start 1200'},
   {s:'pm',d:'Emp# 3739868',a:'Drew Howe · Unit 305752',n:'Start 1200'},
-  {s:'pm',d:'Emp# 5026040',a:'Enrique Martinez · Unit 305861',n:'Start 1200'},
+  {s:'pm',d:'Emp# 5026040',a:'Enrique Martinez · Unit 305861 · Dr 14S',n:'Start 1200 · FedEx Trailer · After PM setup'},
   {s:'pm',d:'Emp# 144365',a:'Otto Kazmer · Unit 305439',n:'Start 1200'},
   {s:'pm',d:'Emp# 429890',a:'Brian Chick · Unit 305575',n:'Start 1230'},
   {s:'pm',d:'Emp# 655184',a:'Hansel Cedillos · Unit 306224',n:'Start 1945'},
