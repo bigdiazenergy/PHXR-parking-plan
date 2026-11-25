@@ -1376,34 +1376,32 @@ function clearSearch(){
 }
 
 // ── TRAILER AUDIT ──────────────────────────────────────────────────
-const TA_STORE='phxr_ta_v12';
+const TA_STORE='phxr_ta_v13';
 const TA_TABS=['am','pm','tram','trpm'];
 const TA_LABELS={am:'AM',pm:'PM',tram:'Transition AM',trpm:'Transition PM'};
 const TA_LATEST_AUDIT_ROWS=[
-  {trailer:'100624',door:'5N',contents:'MT',uld:'',notes:''},
-  {trailer:'95955',door:'6N',contents:'MT',uld:'',notes:''},
+  {trailer:'706827',door:'5N',contents:'MT',uld:'Pallets / Fiss',notes:'ULD text transcribed as written'},
+  {trailer:'403519',door:'6N',contents:'MT',uld:'',notes:''},
   {trailer:'15153',door:'7S',contents:'Pallets',uld:'',notes:''},
-  {trailer:'707242',door:'8N',contents:'MT',uld:'',notes:''},
-  {trailer:'Heartland X17767',door:'8S',contents:'MT',uld:'',notes:''},
-  {trailer:'Heartland X18020',door:'9S',contents:'MT',uld:'',notes:''},
-  {trailer:'176129',door:'10N',contents:'MT',uld:'',notes:''},
-  {trailer:'310119',door:'10S',contents:'MT',uld:'',notes:''},
-  {trailer:'707581',door:'10S–11N',contents:'MT',uld:'',notes:'Location spans both doors on worksheet'},
-  {trailer:'100689',door:'11S',contents:'MT',uld:'',notes:''},
-  {trailer:'171321',door:'12N',contents:'MT',uld:'',notes:''},
-  {trailer:'716228',door:'14N',contents:'MT',uld:'',notes:''},
-  {trailer:'708395',door:'16N',contents:'MT',uld:'',notes:''},
-  {trailer:'709011',door:'16S',contents:'MT',uld:'',notes:''},
-  {trailer:'711980',door:'18N',contents:'MT',uld:'',notes:''},
-  {trailer:'712432',door:'18S',contents:'ULD',uld:'',notes:''},
-  {trailer:'711788',door:'19N',contents:'ULD',uld:'Unclear in source',notes:''},
-  {trailer:'402858',door:'19S',contents:'MT',uld:'AQE115142',notes:''},
-  {trailer:'402446',door:'Unclear in source',contents:'MT',uld:'',notes:''},
-  {trailer:'170188',door:'21S',contents:'MT',uld:'',notes:''},
-  {trailer:'Unclear trailer ID',door:'23S',contents:'MT',uld:'',notes:'Handwritten identifier not legible'},
-  {trailer:'401160',door:'23S',contents:'MT',uld:'',notes:''},
+  {trailer:'711443',door:'9N',contents:'MT',uld:'',notes:''},
+  {trailer:'706228',door:'9S',contents:'MT',uld:'',notes:''},
+  {trailer:'Heartland X17767',door:'10N',contents:'MT',uld:'',notes:''},
+  {trailer:'708355',door:'10S',contents:'MT',uld:'',notes:''},
+  {trailer:'FEDZ56658',door:'10S–11N',contents:'MT',uld:'',notes:'Location spans both doors on worksheet'},
+  {trailer:'Unclear trailer ID',door:'11N',contents:'MT',uld:'',notes:'Handwritten identifier not legible'},
+  {trailer:'708957',door:'11S',contents:'MT',uld:'',notes:''},
+  {trailer:'711050',door:'12N',contents:'MT',uld:'',notes:''},
+  {trailer:'709420',door:'12S',contents:'MT',uld:'',notes:''},
+  {trailer:'X1512',door:'13N',contents:'MT',uld:'',notes:'Identifier transcribed as written'},
+  {trailer:'710226',door:'14S',contents:'MT',uld:'',notes:''},
+  {trailer:'712051',door:'15S',contents:'MT',uld:'',notes:''},
+  {trailer:'Unclear trailer ID',door:'18S',contents:'MT',uld:'',notes:'Handwritten identifier not legible'},
+  {trailer:'Unclear trailer ID',door:'19N',contents:'ULD',uld:'Unclear in source',notes:'Handwritten trailer and ULD identifiers not legible'},
+  {trailer:'403283',door:'19S',contents:'MT',uld:'',notes:''},
+  {trailer:'401600',door:'23S',contents:'MT',uld:'',notes:''},
+  {trailer:'Unclear trailer ID',door:'24S',contents:'MT',uld:'',notes:'Handwritten identifier not legible'},
 ];
-const TA_LATEST_AUDIT_META={updatedDate:'11/20/2026',updatedTime:'',updatedName:'',updatedEE:''};
+const TA_LATEST_AUDIT_META={updatedDate:'11/25/2026',updatedTime:'',updatedName:'',updatedEE:''};
 function taLatestAudit(){
   return {...TA_LATEST_AUDIT_META,rows:TA_LATEST_AUDIT_ROWS.map(r=>({...r}))};
 }
