@@ -1376,7 +1376,7 @@ function clearSearch(){
 }
 
 // ── TRAILER AUDIT ──────────────────────────────────────────────────
-const TA_STORE='phxr_ta_v13';
+const TA_STORE='phxr_ta_v14';
 const TA_TABS=['am','pm','tram','trpm'];
 const TA_LABELS={am:'AM',pm:'PM',tram:'Transition AM',trpm:'Transition PM'};
 const TA_LATEST_AUDIT_ROWS=[
@@ -1388,18 +1388,17 @@ const TA_LATEST_AUDIT_ROWS=[
   {trailer:'Heartland X17767',door:'10N',contents:'MT',uld:'',notes:''},
   {trailer:'708355',door:'10S',contents:'MT',uld:'',notes:''},
   {trailer:'FEDZ56658',door:'10S–11N',contents:'MT',uld:'',notes:'Location spans both doors on worksheet'},
-  {trailer:'Unclear trailer ID',door:'11N',contents:'MT',uld:'',notes:'Handwritten identifier not legible'},
-  {trailer:'708957',door:'11S',contents:'MT',uld:'',notes:''},
+  {trailer:'708497',door:'11S',contents:'MT',uld:'',notes:''},
   {trailer:'711050',door:'12N',contents:'MT',uld:'',notes:''},
   {trailer:'709420',door:'12S',contents:'MT',uld:'',notes:''},
   {trailer:'X1512',door:'13N',contents:'MT',uld:'',notes:'Identifier transcribed as written'},
   {trailer:'710226',door:'14S',contents:'MT',uld:'',notes:''},
-  {trailer:'712051',door:'15S',contents:'MT',uld:'',notes:''},
-  {trailer:'Unclear trailer ID',door:'18S',contents:'MT',uld:'',notes:'Handwritten identifier not legible'},
-  {trailer:'Unclear trailer ID',door:'19N',contents:'ULD',uld:'Unclear in source',notes:'Handwritten trailer and ULD identifiers not legible'},
+  {trailer:'712051',door:'18N',contents:'MT',uld:'',notes:''},
+  {trailer:'711784',door:'18S',contents:'MT',uld:'',notes:''},
+  {trailer:'711979',door:'19N',contents:'ULD',uld:'Unclear in source',notes:'ULD identifier not legible'},
   {trailer:'403283',door:'19S',contents:'MT',uld:'',notes:''},
-  {trailer:'401600',door:'23S',contents:'MT',uld:'',notes:''},
-  {trailer:'Unclear trailer ID',door:'24S',contents:'MT',uld:'',notes:'Handwritten identifier not legible'},
+  {trailer:'401600',door:'23S',contents:'MT',uld:'',notes:'Heavyweight overflow area'},
+  {trailer:'16248',door:'24N',contents:'MT',uld:'',notes:''},
 ];
 const TA_LATEST_AUDIT_META={updatedDate:'11/25/2026',updatedTime:'',updatedName:'',updatedEE:''};
 function taLatestAudit(){
