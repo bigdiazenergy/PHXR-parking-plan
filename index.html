@@ -250,6 +250,22 @@
   .ta-meta-f { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 80px; }
   .ta-meta-lbl { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.4px; }
   .ta-empty { text-align: center; color: var(--text3); font-size: 12px; padding: 20px 10px; }
+
+  /* ── INBOUND ROUTE ALERT ── */
+  .ira-section { background: var(--bg2); border-bottom: 1px solid var(--border); }
+  .ira-hdr { width: 100%; display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: rgba(248,113,113,0.14); border: 0; border-top: 1px solid rgba(248,113,113,0.3); border-bottom: 1px solid rgba(248,113,113,0.3); color: inherit; cursor: pointer; text-align: left; user-select: none; }
+  .ira-hdr-title { flex: 1; color: var(--red); font-size: 12px; font-weight: 800; letter-spacing: 0.8px; }
+  .ira-hdr-meta { color: var(--text2); font-size: 10px; white-space: nowrap; }
+  .ira-hdr-arrow { color: var(--red); font-size: 10px; }
+  .ira-body { padding: 10px; background: rgba(248,113,113,0.04); }
+  .ira-callout { padding: 8px 10px; margin-bottom: 8px; border-left: 4px solid var(--red); background: rgba(248,113,113,0.1); color: var(--text2); font-size: 11px; line-height: 1.45; }
+  .ira-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 7px; }
+  .ira-route { min-width: 0; padding: 8px 9px; border: 1px solid rgba(248,113,113,0.25); border-radius: 6px; background: var(--bg3); }
+  .ira-route-id { color: var(--red); font-family: monospace; font-size: 14px; font-weight: 800; }
+  .ira-route-path { margin-top: 3px; color: var(--text); font-size: 11px; font-weight: 600; }
+  .ira-route-status { margin-top: 2px; color: var(--yellow); font-size: 10px; }
+  .ira-foot { margin-top: 8px; color: var(--text3); font-size: 10px; }
+  @media (max-width: 560px) { .ira-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } .ira-hdr-meta { display: none; } }
 </style>
 </head>
 <body>
@@ -286,6 +302,27 @@
     <div class="ta-pan" id="ta-pan-pm"></div>
     <div class="ta-pan" id="ta-pan-tram"></div>
     <div class="ta-pan" id="ta-pan-trpm"></div>
+  </div>
+</div>
+
+<!-- ══════════ INBOUND ROUTE ALERT (collapsible, always visible) ══════════ -->
+<div class="ira-section" id="inbound-route-alert">
+  <button class="ira-hdr" type="button" id="ira-toggle" aria-expanded="true" aria-controls="ira-body" onclick="toggleInboundRouteAlert()">
+    <span class="ira-hdr-title">⚠️ INBOUND ROUTE ALERT</span>
+    <span class="ira-hdr-meta">6 routes · Updated 11/27/2026</span>
+    <span class="ira-hdr-arrow" id="ira-arrow">▲</span>
+  </button>
+  <div class="ira-body" id="ira-body">
+    <div class="ira-callout"><strong>PHXR → LASR:</strong> Six additional routes are scheduled inbound. All are currently shown as <strong>Not Started</strong>.</div>
+    <div class="ira-grid">
+      <div class="ira-route"><div class="ira-route-id">MMH101</div><div class="ira-route-path">PHXR → LASR</div><div class="ira-route-status">Not Started</div></div>
+      <div class="ira-route"><div class="ira-route-id">MMH102</div><div class="ira-route-path">PHXR → LASR</div><div class="ira-route-status">Not Started</div></div>
+      <div class="ira-route"><div class="ira-route-id">MMH105</div><div class="ira-route-path">PHXR → LASR</div><div class="ira-route-status">Not Started</div></div>
+      <div class="ira-route"><div class="ira-route-id">MMH106</div><div class="ira-route-path">PHXR → LASR</div><div class="ira-route-status">Not Started</div></div>
+      <div class="ira-route"><div class="ira-route-id">MMH108</div><div class="ira-route-path">PHXR → LASR</div><div class="ira-route-status">Not Started</div></div>
+      <div class="ira-route"><div class="ira-route-id">MMH109</div><div class="ira-route-path">PHXR → LASR</div><div class="ira-route-status">Not Started</div></div>
+    </div>
+    <div class="ira-foot">Source communication received 11/27/2026 · Alert appears above every parking-plan tab.</div>
   </div>
 </div>
 
@@ -985,6 +1022,12 @@ function showTr(t) {
 }
 
 const DB=[
+  {s:'all',d:'Inbound Route MMH101',a:'PHXR → LASR · Not Started',n:'Inbound alert · Updated 11/27/2026'},
+  {s:'all',d:'Inbound Route MMH102',a:'PHXR → LASR · Not Started',n:'Inbound alert · Updated 11/27/2026'},
+  {s:'all',d:'Inbound Route MMH105',a:'PHXR → LASR · Not Started',n:'Inbound alert · Updated 11/27/2026'},
+  {s:'all',d:'Inbound Route MMH106',a:'PHXR → LASR · Not Started',n:'Inbound alert · Updated 11/27/2026'},
+  {s:'all',d:'Inbound Route MMH108',a:'PHXR → LASR · Not Started',n:'Inbound alert · Updated 11/27/2026'},
+  {s:'all',d:'Inbound Route MMH109',a:'PHXR → LASR · Not Started',n:'Inbound alert · Updated 11/27/2026'},
   {s:'am',d:'Dr 1',a:'Empty',n:''},
   {s:'am',d:'Dr 2N',a:'Empty',n:''},
   {s:'am',d:'Cust. Row',a:'Tractor + Str. Truck x2',n:'Twin axle tractor only'},
@@ -1451,6 +1494,16 @@ function toggleTA(){
   document.getElementById('ta-body').style.display=taOpen?'':'none';
   document.getElementById('ta-hdr-arrow').textContent=taOpen?'▲':'▼';
   if(taOpen){taRender(taCurTab);taUpdateMeta();}
+}
+
+function toggleInboundRouteAlert(){
+  const body=document.getElementById('ira-body');
+  const arrow=document.getElementById('ira-arrow');
+  const toggle=document.getElementById('ira-toggle');
+  const isOpen=body.style.display!=='none';
+  body.style.display=isOpen?'none':'';
+  arrow.textContent=isOpen?'▼':'▲';
+  toggle.setAttribute('aria-expanded',String(!isOpen));
 }
 
 function showTaTab(tab){
